@@ -2,6 +2,7 @@ import { Head, Link, useForm, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
+import Dropdown from '@/Components/Dropdown';
 import { useState } from 'react';
 
 export default function Index({ boards }) {
@@ -109,32 +110,26 @@ export default function Index({ boards }) {
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {boards.map((board) => (
-                                        <div key={board.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <h3 className="text-xl font-semibold text-gray-900">{board.name}</h3>
-                                                <div className="flex gap-2">
-                                                    <Link
-                                                        href={route('boards.show', board.id)}
-                                                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                                                    >
-                                                        View
-                                                    </Link>
-                                                    <button
-                                                        onClick={() => setBoardToDelete(board)}
-                                                        className="text-red-600 hover:text-red-800 text-sm font-medium"
-                                                    >
-                                                        Delete
-                                                    </button>
+                                        <div key={board.id} className="relative bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow group">
+                                            {/* Clickable area */}
+                                            <Link
+                                                href={route('boards.show', board.id)}
+                                                className="block absolute inset-0 z-10"
+                                            >
+                                                <span className="sr-only">View {board.name}</span>
+                                            </Link>
+                                            
+                                            {/* Content */}
+                                            <div className="relative z-0">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                                                        {board.name}
+                                                    </h3>
                                                 </div>
-                                            </div>
-                                            
-                                            {board.description && (
-                                                <p className="text-gray-600 mb-4">{board.description}</p>
-                                            )}
-                                            
-                                            <div className="flex items-center justify-between text-sm text-gray-500">
-                                                <span>{board.columns.length} columns</span>
-                                                <span>{board.cards?.length || 0} cards</span>
+                                                
+                                                {board.description && (
+                                                    <p className="text-gray-600 mb-4">{board.description}</p>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
