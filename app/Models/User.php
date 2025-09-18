@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Card::class);
     }
+
+    public function sharedBoards()
+    {
+        return $this->belongsToMany(Board::class, 'board_shares', 'user_id', 'board_id');
+    }
 }

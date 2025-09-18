@@ -1,27 +1,12 @@
 <?php
 
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\BoardShareController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        $boards = auth()->user()->boards()->with(['columns' => function($query) {
-            $query->orderBy('position');
-        }])->get();
-        return Inertia::render('Boards/Index', ['boards' => $boards]);
-    }
-    
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return redirect('/');
@@ -38,6 +23,12 @@ Route::middleware('auth')->group(function () {
     // Card routes
     Route::resource('cards', CardController::class)->except(['index']);
     Route::post('/cards/{card}/move', [CardController::class, 'move'])->name('cards.move');
+    
+    // Board sharing routes
+    Route::get('/boards/{board}/shares', [BoardShareController::class, 'index'])->name('boards.shares');
+    Route::get('/users/search', [BoardShareController::class, 'searchUsers'])->name('users.search');
+    Route::post('/boards/{board}/shares', [BoardShareController::class, 'store'])->name('boards.shares.store');
+    Route::delete('/boards/{board}/shares/{share}', [BoardShareController::class, 'destroy'])->name('boards.shares.destroy');
 });
 
 require __DIR__.'/auth.php';

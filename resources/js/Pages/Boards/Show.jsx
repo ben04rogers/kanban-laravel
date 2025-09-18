@@ -5,6 +5,7 @@ import DangerButton from '@/Components/DangerButton';
 import Breadcrumb from '@/Components/Breadcrumb';
 import CardModal from '@/Components/CardModal';
 import CardDetailModal from '@/Components/CardDetailModal';
+import ShareBoardModal from '@/Components/ShareBoardModal';
 import DroppableColumn from '@/Components/DroppableColumn';
 import { useState, useEffect } from 'react';
 
@@ -13,6 +14,7 @@ export default function Show({ board, cardId = null }) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCardModal, setShowCardModal] = useState(false);
     const [showCardDetailModal, setShowCardDetailModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     
@@ -200,6 +202,12 @@ export default function Show({ board, cardId = null }) {
                                                 Add Card
                                             </button>
                                             <button
+                                                onClick={() => setShowShareModal(true)}
+                                                className="px-4 py-2 text-purple-600 bg-purple-50 rounded-md hover:bg-purple-100"
+                                            >
+                                                Share Board
+                                            </button>
+                                            <button
                                                 onClick={() => setShowEditForm(true)}
                                                 className="px-4 py-2 text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100"
                                             >
@@ -284,6 +292,13 @@ export default function Show({ board, cardId = null }) {
                 isOpen={showCardDetailModal}
                 onClose={closeCardDetailModal}
                 card={selectedCard}
+            />
+
+            {/* Share Board Modal */}
+            <ShareBoardModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                boardId={board.id}
             />
         </AuthenticatedLayout>
     );

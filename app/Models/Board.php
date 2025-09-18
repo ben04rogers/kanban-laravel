@@ -31,4 +31,14 @@ class Board extends Model
     {
         return $this->hasMany(Card::class);
     }
+
+    public function shares(): HasMany
+    {
+        return $this->hasMany(BoardShare::class);
+    }
+
+    public function sharedWith(): HasMany
+    {
+        return $this->hasManyThrough(User::class, BoardShare::class, 'board_id', 'id', 'id', 'user_id');
+    }
 }
