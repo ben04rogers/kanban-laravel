@@ -2,6 +2,7 @@ import { Head, Link, useForm, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
+import Breadcrumb from '@/Components/Breadcrumb';
 import { useState } from 'react';
 
 export default function Show({ board }) {
@@ -26,12 +27,27 @@ export default function Show({ board }) {
         router.delete(route('boards.destroy', board.id));
     };
 
+    const breadcrumbItems = [
+        {
+            label: 'Boards',
+            href: '/'
+        },
+        {
+            label: board.name
+        }
+    ];
+
     return (
         <AuthenticatedLayout>
             <Head title={board.name} />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    {/* Breadcrumb */}
+                    <div className="mb-6">
+                        <Breadcrumb items={breadcrumbItems} />
+                    </div>
+                    
                     {/* Board Header */}
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div className="p-6">
