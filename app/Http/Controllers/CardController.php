@@ -21,7 +21,7 @@ class CardController extends Controller
         
         // Load the board with all necessary relationships
         $board = $card->board;
-        $board->load(['columns.cards' => function($query) {
+        $board->load(['columns.cards.user' => function($query) {
             $query->orderBy('position');
         }]);
 

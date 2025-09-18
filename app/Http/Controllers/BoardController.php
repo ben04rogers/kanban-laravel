@@ -31,7 +31,7 @@ class BoardController extends Controller
             'columns' => function($query) {
                 $query->orderBy('position');
             },
-            'columns.cards' => function($query) {
+            'columns.cards.user' => function($query) {
                 $query->orderBy('position');
             },
             'user'

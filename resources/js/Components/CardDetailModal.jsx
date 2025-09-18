@@ -111,9 +111,8 @@ export default function CardDetailModal({
                         </div>
 
                         {/* Card Meta */}
-                        <div className="flex items-center gap-4 text-sm text-gray-500">
-                            <span>Created by {card.user?.name}</span>
-                            <span>Created {new Date(card.created_at).toLocaleDateString()}</span>
+                        <div className="gap-4 text-sm text-gray-500">
+                            <p>Created by {card.user?.name} on {new Date(card.created_at).toLocaleDateString()}</p>
                         </div>
 
                         {/* Card Description */}
