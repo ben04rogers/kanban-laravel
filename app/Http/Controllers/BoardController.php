@@ -28,6 +28,9 @@ class BoardController extends Controller
         $this->authorize('view', $board);
 
         $board->load([
+            'columns' => function($query) {
+                $query->orderBy('position');
+            },
             'columns.cards' => function($query) {
                 $query->orderBy('position');
             },

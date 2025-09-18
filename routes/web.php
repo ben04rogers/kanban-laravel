@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,10 @@ Route::middleware('auth')->group(function () {
     
     // Board routes
     Route::resource('boards', BoardController::class);
+    
+    // Card routes
+    Route::resource('cards', CardController::class)->except(['index', 'show']);
+    Route::post('/cards/{card}/move', [CardController::class, 'move'])->name('cards.move');
 });
 
 require __DIR__.'/auth.php';

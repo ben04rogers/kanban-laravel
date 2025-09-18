@@ -138,10 +138,6 @@ export default function Index({ boards }) {
                                                         {board.name}
                                                     </h3>
                                                 </div>
-                                                
-                                                {board.description && (
-                                                    <p className="text-gray-600 mb-4">{board.description}</p>
-                                                )}
                                             </div>
                                         </div>
                                     ))}
