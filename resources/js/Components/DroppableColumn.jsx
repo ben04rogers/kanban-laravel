@@ -5,7 +5,8 @@ import DraggableCard from './DraggableCard';
 export default function DroppableColumn({ 
     column, 
     onCardMove, 
-    onCardMoveToColumn 
+    onCardMoveToColumn,
+    onCardClick 
 }) {
     const ref = useRef(null);
     const [isDragOver, setIsDragOver] = useState(false);
@@ -67,6 +68,7 @@ export default function DroppableColumn({
                             key={card.id}
                             card={card}
                             onMove={handleCardMove}
+                            onCardClick={onCardClick}
                         />
                     ))
                 ) : (

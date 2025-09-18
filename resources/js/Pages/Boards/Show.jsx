@@ -4,14 +4,17 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import Breadcrumb from '@/Components/Breadcrumb';
 import CardModal from '@/Components/CardModal';
+import CardDetailModal from '@/Components/CardDetailModal';
 import DroppableColumn from '@/Components/DroppableColumn';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function Show({ board }) {
+export default function Show({ board, cardId = null }) {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCardModal, setShowCardModal] = useState(false);
+    const [showCardDetailModal, setShowCardDetailModal] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState(null);
+    const [selectedCard, setSelectedCard] = useState(null);
     
     const { data, setData, put, processing, errors, reset } = useForm({
         name: board.name,
@@ -64,6 +67,55 @@ export default function Show({ board }) {
             },
         });
     };
+
+    const handleCardClick = (card) => {
+        setSelectedCard(card);
+        setShowCardDetailModal(true);
+        // Update URL without page reload
+        window.history.pushState({}, '', `/cards/${card.id}`);
+    };
+
+    const closeCardDetailModal = () => {
+        setShowCardDetailModal(false);
+        setSelectedCard(null);
+        // Reset URL to board
+        window.history.pushState({}, '', `/boards/${board.id}`);
+    };
+
+    // Handle URL parameter for card modal
+    useEffect(() => {
+        if (cardId) {
+            // Find the card in the board data
+            const card = board.columns
+                .flatMap(col => col.cards || [])
+                .find(c => c.id == cardId);
+            
+            if (card) {
+                setSelectedCard(card);
+                setShowCardDetailModal(true);
+            }
+        }
+    }, [cardId, board.columns]);
+
+    // Handle browser back/forward navigation
+    useEffect(() => {
+        const handlePopState = () => {
+            const currentPath = window.location.pathname;
+            if (currentPath.includes('/cards/')) {
+                const cardIdFromUrl = currentPath.split('/cards/')[1];
+                if (cardIdFromUrl && cardIdFromUrl !== cardId) {
+                    // Navigate to the card
+                    window.location.href = `/cards/${cardIdFromUrl}`;
+                }
+            } else if (showCardDetailModal) {
+                // Close modal if we're back on the board
+                closeCardDetailModal();
+            }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [cardId, showCardDetailModal]);
 
     const breadcrumbItems = [
         {
@@ -176,6 +228,7 @@ export default function Show({ board }) {
                                         column={column}
                                         onCardMove={handleCardMove}
                                         onCardMoveToColumn={handleCardMoveToColumn}
+                                        onCardClick={handleCardClick}
                                     />
                                 ))}
                             </div>
@@ -224,6 +277,13 @@ export default function Show({ board }) {
                 columnId={selectedColumn?.id}
                 columnName={selectedColumn?.name}
                 columns={board.columns}
+            />
+
+            {/* Card Detail Modal */}
+            <CardDetailModal
+                isOpen={showCardDetailModal}
+                onClose={closeCardDetailModal}
+                card={selectedCard}
             />
         </AuthenticatedLayout>
     );

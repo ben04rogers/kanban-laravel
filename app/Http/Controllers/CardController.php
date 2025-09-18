@@ -13,6 +13,24 @@ class CardController extends Controller
 {
     use AuthorizesRequests;
 
+    public function show(Card $card)
+    {
+        $this->authorize('view', $card);
+
+        $card->load(['board', 'column', 'user']);
+        
+        // Load the board with all necessary relationships
+        $board = $card->board;
+        $board->load(['columns.cards' => function($query) {
+            $query->orderBy('position');
+        }]);
+
+        return Inertia::render('Boards/Show', [
+            'board' => $board,
+            'cardId' => $card->id
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -88,9 +106,10 @@ class CardController extends Controller
     {
         $this->authorize('delete', $card);
 
+        $boardId = $card->board_id;
         $card->delete();
 
-        return redirect()->back()
+        return redirect()->route('boards.show', $boardId)
             ->with('success', 'Card deleted successfully!');
     }
 

@@ -5,6 +5,7 @@ import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 export default function DraggableCard({ 
     card, 
     onMove, 
+    onCardClick,
     isDragging = false 
 }) {
     const ref = useRef(null);
@@ -59,10 +60,19 @@ export default function DraggableCard({
         );
     }, [card.id, card.title, card.position, card.board_column_id, onMove]);
 
+    const handleClick = (e) => {
+        // Only handle click if not dragging
+        if (!isDragging && onCardClick) {
+            e.preventDefault();
+            onCardClick(card);
+        }
+    };
+
     return (
         <div
             ref={ref}
-            className={`bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-all cursor-grab active:cursor-grabbing ${
+            onClick={handleClick}
+            className={`bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-all cursor-pointer ${
                 isDragOver ? 'border-blue-400 bg-blue-50' : ''
             } ${isDragging ? 'opacity-50' : ''}`}
         >

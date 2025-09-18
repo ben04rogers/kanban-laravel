@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('boards', BoardController::class);
     
     // Card routes
-    Route::resource('cards', CardController::class)->except(['index', 'show']);
+    Route::resource('cards', CardController::class)->except(['index']);
     Route::post('/cards/{card}/move', [CardController::class, 'move'])->name('cards.move');
 });
 
