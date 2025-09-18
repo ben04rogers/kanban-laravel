@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        $boards = auth()->user()->boards()->with(['columns' => function($query) {
+            $query->orderBy('position');
+        }])->get();
+        return Inertia::render('Boards/Index', ['boards' => $boards]);
+    }
+    
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -16,8 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $boards = auth()->user()->boards()->with(['columns', 'cards'])->get();
-    return Inertia::render('Dashboard', ['boards' => $boards]);
+    return redirect('/');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
