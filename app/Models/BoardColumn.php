@@ -13,7 +13,6 @@ class BoardColumn extends Model
 
     protected $fillable = [
         'name',
-        'color',
         'position',
         'board_id',
     ];
