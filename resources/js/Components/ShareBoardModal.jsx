@@ -36,10 +36,8 @@ export default function ShareBoardModal({
     const loadShares = async () => {
         try {
             const sharesUrl = `/boards/${boardId}/shares`;
-            console.log('Loading shares from:', sharesUrl);
             const response = await fetch(sharesUrl);
             const data = await response.json();
-            console.log('Shares response:', data);
             setShares(data.shares || []);
         } catch (error) {
             console.error('Error loading shares:', error);
@@ -49,12 +47,9 @@ export default function ShareBoardModal({
     const searchUsers = async (query) => {
         setIsSearching(true);
         try {
-            console.log('Searching users with query:', query);
             const searchUrl = `/users/search?q=${encodeURIComponent(query)}`;
-            console.log('Search URL:', searchUrl);
             const response = await fetch(searchUrl);
             const data = await response.json();
-            console.log('Search response:', data);
             setSearchResults(data.users || []);
         } catch (error) {
             console.error('Error searching users:', error);
@@ -65,9 +60,7 @@ export default function ShareBoardModal({
 
     const shareWithUser = async (user) => {
         setIsLoading(true);
-        try {
-            console.log('Sharing board with user:', user);
-            
+        try {            
             // Use Inertia's router.post which handles CSRF automatically
             router.post(`/boards/${boardId}/shares`, {
                 user_id: user.id
