@@ -19,6 +19,7 @@ Route::middleware('auth')->group(function () {
     
     // Board routes
     Route::resource('boards', BoardController::class);
+    Route::post('/boards/{board}/columns/reorder', [BoardController::class, 'reorderColumns'])->name('boards.columns.reorder');
     
     // Card routes
     Route::resource('cards', CardController::class)->except(['index']);

@@ -1,4 +1,4 @@
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
@@ -6,13 +6,14 @@ import Breadcrumb from '@/Components/Breadcrumb';
 import CardModal from '@/Components/CardModal';
 import CardDetailModal from '@/Components/CardDetailModal';
 import ShareBoardModal from '@/Components/ShareBoardModal';
+import EditBoardModal from '@/Components/EditBoardModal';
 import DroppableColumn from '@/Components/DroppableColumn';
 import Dropdown from '@/Components/Dropdown';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/Contexts/ToastContext';
 
 export default function Show({ board, cardId = null }) {
-    const [showEditForm, setShowEditForm] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCardModal, setShowCardModal] = useState(false);
     const [showCardDetailModal, setShowCardDetailModal] = useState(false);
@@ -20,24 +21,6 @@ export default function Show({ board, cardId = null }) {
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const { success, error } = useToast();
-    
-    const { data, setData, put, processing, errors, reset } = useForm({
-        name: board.name,
-        description: board.description || '',
-    });
-
-    const submit = (e) => {
-        e.preventDefault();
-        put(route('boards.update', board.id), {
-            onSuccess: () => {
-                success(`Board "${data.name}" updated successfully!`, 'Board Updated');
-                setShowEditForm(false);
-            },
-            onError: () => {
-                error('Failed to update board. Please try again.');
-            },
-        });
-    };
 
     const deleteBoard = () => {
         router.delete(route('boards.destroy', board.id), {
@@ -159,55 +142,13 @@ export default function Show({ board, cardId = null }) {
                         <div className="p-6">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    {showEditForm ? (
-                                        <form onSubmit={submit} className="space-y-4">
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    value={data.name}
-                                                    onChange={(e) => setData('name', e.target.value)}
-                                                    className="text-2xl font-bold w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                />
-                                                {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
-                                            </div>
-                                            <div>
-                                                <textarea
-                                                    value={data.description}
-                                                    onChange={(e) => setData('description', e.target.value)}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                    rows="2"
-                                                    placeholder="Board description"
-                                                />
-                                                {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
-                                            </div>
-                                            <div className="flex gap-2">
-                                                <PrimaryButton type="submit" disabled={processing}>
-                                                    {processing ? 'Saving...' : 'Save'}
-                                                </PrimaryButton>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setShowEditForm(false);
-                                                        reset();
-                                                    }}
-                                                    className="px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300"
-                                                >
-                                                    Cancel
-                                                </button>
-                                            </div>
-                                        </form>
-                                    ) : (
-                                        <div>
-                                            <h1 className="text-2xl font-bold text-gray-900">{board.name}</h1>
-                                            {board.description && (
-                                                <p className="text-gray-600 mt-2">{board.description}</p>
-                                            )}
-                                        </div>
+                                    <h1 className="text-2xl font-bold text-gray-900">{board.name}</h1>
+                                    {board.description && (
+                                        <p className="text-gray-600 mt-2">{board.description}</p>
                                     )}
                                 </div>
                                 
-                                {!showEditForm && (
-                                    <Dropdown>
+                                <Dropdown>
                                         <Dropdown.Trigger>
                                             <button className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                                 <span>Actions</span>
@@ -243,7 +184,7 @@ export default function Show({ board, cardId = null }) {
                                             </button>
                                             
                                             <button
-                                                onClick={() => setShowEditForm(true)}
+                                                onClick={() => setShowEditModal(true)}
                                                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
                                             >
                                                 <div className="flex items-center">
@@ -269,7 +210,6 @@ export default function Show({ board, cardId = null }) {
                                             </button>
                                         </Dropdown.Content>
                                     </Dropdown>
-                                )}
                             </div>
                         </div>
                     </div>
@@ -347,6 +287,13 @@ export default function Show({ board, cardId = null }) {
                 isOpen={showShareModal}
                 onClose={() => setShowShareModal(false)}
                 boardId={board.id}
+            />
+
+            {/* Edit Board Modal */}
+            <EditBoardModal
+                isOpen={showEditModal}
+                onClose={() => setShowEditModal(false)}
+                board={board}
             />
         </AuthenticatedLayout>
     );

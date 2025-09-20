@@ -89,6 +89,26 @@ class BoardController extends Controller
             ->with('success', 'Board deleted successfully!');
     }
 
+    public function reorderColumns(Request $request, Board $board)
+    {
+        $this->authorize('update', $board);
+
+        $request->validate([
+            'columns' => 'required|array',
+            'columns.*.id' => 'required|exists:board_columns,id',
+            'columns.*.position' => 'required|integer|min:0',
+        ]);
+
+        foreach ($request->columns as $columnData) {
+            $board->columns()->where('id', $columnData['id'])->update([
+                'position' => $columnData['position']
+            ]);
+        }
+
+        // Return back to the board page with updated data
+        return redirect()->back();
+    }
+
     private function createDefaultColumns(Board $board)
     {
         $defaultColumns = [
