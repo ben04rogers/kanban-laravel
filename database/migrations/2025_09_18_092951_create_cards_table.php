@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cards', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('title');
             $table->text('description')->nullable();
             $table->integer('position')->default(0);
-            $table->foreignId('board_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('board_id')->constrained()->onDelete('cascade');
             $table->foreignId('board_column_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
