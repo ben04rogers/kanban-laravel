@@ -23,6 +23,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
-        "@atlaskit/pragmatic-drag-and-drop": "^1.7.7"
+        "@atlaskit/pragmatic-drag-and-drop": "^1.7.7",
+        "@tinymce/tinymce-react": "^6.3.0"
     }
 }

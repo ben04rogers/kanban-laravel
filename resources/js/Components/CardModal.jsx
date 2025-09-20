@@ -1,6 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useState, useEffect } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
 export default function CardModal({ 
     isOpen, 
@@ -45,7 +46,7 @@ export default function CardModal({
 
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div className="relative top-10 mx-auto p-6 border w-full max-w-4xl shadow-lg rounded-md bg-white">
                 <div className="mt-3">
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4">
@@ -107,13 +108,24 @@ export default function CardModal({
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
                                 Description
                             </label>
-                            <textarea
-                                id="description"
+                            <Editor
+                                apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
                                 value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                rows="4"
-                                placeholder="Enter card description (optional)"
+                                onEditorChange={(content) => setData('description', content)}
+                                init={{
+                                    height: 300,
+                                    menubar: false,
+                                    plugins: [
+                                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                                    ],
+                                    toolbar: 'undo redo | blocks | ' +
+                                        'bold italic forecolor | alignleft aligncenter ' +
+                                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                                        'removeformat | help',
+                                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                }}
                             />
                             {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
                         </div>

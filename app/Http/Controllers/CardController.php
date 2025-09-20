@@ -35,7 +35,7 @@ class CardController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:50000',
             'board_id' => 'required|exists:boards,id',
             'board_column_id' => 'required|exists:board_columns,id',
         ]);
@@ -66,7 +66,7 @@ class CardController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
+            'description' => 'nullable|string|max:50000',
         ]);
 
         $card->update([

@@ -2,6 +2,7 @@ import { useForm, router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import { useState, useEffect } from 'react';
+import { Editor } from '@tinymce/tinymce-react';
 
 export default function CardDetailModal({ 
     isOpen, 
@@ -75,7 +76,7 @@ export default function CardDetailModal({
             onClick={handleClose}
         >
             <div 
-                className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white"
+                className="relative top-10 mx-auto p-6 border w-full max-w-5xl shadow-lg rounded-md bg-white"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="mt-3">
@@ -119,17 +120,32 @@ export default function CardDetailModal({
                         <div>
                             <h3 className="text-lg font-medium text-gray-900 mb-2">Description</h3>
                             {isEditing ? (
-                                <textarea
+                                <Editor
+                                    apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
                                     value={data.description}
-                                    onChange={(e) => setData('description', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    rows="6"
-                                    placeholder="Add a description..."
+                                    onEditorChange={(content) => setData('description', content)}
+                                    init={{
+                                        height: 400,
+                                        menubar: false,
+                                        plugins: [
+                                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                                        ],
+                                        toolbar: 'undo redo | blocks | ' +
+                                            'bold italic forecolor | alignleft aligncenter ' +
+                                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                                            'removeformat | help',
+                                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                                    }}
                                 />
                             ) : (
-                                <div className="min-h-24 p-3 bg-gray-50 rounded-md">
+                                <div className="p-4 bg-gray-50 rounded-md border">
                                     {card.description ? (
-                                        <p className="text-gray-700 whitespace-pre-wrap">{card.description}</p>
+                                        <div 
+                                            className="text-gray-700 prose prose-sm max-w-none"
+                                            dangerouslySetInnerHTML={{ __html: card.description }}
+                                        />
                                     ) : (
                                         <p className="text-gray-400 italic">No description added</p>
                                     )}

@@ -77,11 +77,8 @@ export default function DraggableCard({
             } ${isDragging ? 'opacity-50' : ''}`}
         >
             <h4 className="font-medium text-gray-900 mb-2">{card.title}</h4>
-            {card.description && (
-                <p className="text-sm text-gray-600 mb-2">{card.description}</p>
-            )}
             <div className="text-xs text-gray-500">
-                Created by {card.user?.name}
+                Created by {card.user?.name} • {new Date(card.created_at).toLocaleDateString()}
             </div>
         </div>
     );
