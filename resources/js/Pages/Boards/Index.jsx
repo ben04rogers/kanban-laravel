@@ -1,41 +1,23 @@
-import { Head, Link, useForm, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import Dropdown from '@/Components/Dropdown';
 import Breadcrumb from '@/Components/Breadcrumb';
+import BoardModal from '@/Components/BoardModal';
 import { useState } from 'react';
 import { useToast } from '@/Contexts/ToastContext';
 
 export default function Index({ boards }) {
-    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [boardToDelete, setBoardToDelete] = useState(null);
     const { success, error } = useToast();
-    
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        description: '',
-    });
 
     const breadcrumbItems = [
         {
             label: 'Boards'
         }
     ];
-
-    const submit = (e) => {
-        e.preventDefault();
-        post(route('boards.store'), {
-            onSuccess: () => {
-                success(`Board "${data.name}" created successfully!`, 'Board Created');
-                reset();
-                setShowCreateForm(false);
-            },
-            onError: () => {
-                error('Failed to create board. Please try again.');
-            },
-        });
-    };
 
     const deleteBoard = (boardId) => {
         const board = boards.find(b => b.id === boardId);
@@ -65,64 +47,10 @@ export default function Index({ boards }) {
                         <div className="p-6 text-gray-900">
                             <div className="flex justify-between items-center mb-6">
                                 <h2 className="text-2xl font-bold">My Boards</h2>
-                                <PrimaryButton onClick={() => setShowCreateForm(true)}>
+                                <PrimaryButton onClick={() => setShowCreateModal(true)}>
                                     Create New Board
                                 </PrimaryButton>
                             </div>
-
-                            {/* Create Board Form */}
-                            {showCreateForm && (
-                                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                                    <h3 className="text-lg font-semibold mb-4">Create New Board</h3>
-                                    <form onSubmit={submit}>
-                                        <div className="mb-4">
-                                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                                Board Name
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                value={data.name}
-                                                onChange={(e) => setData('name', e.target.value)}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="Enter board name"
-                                            />
-                                            {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
-                                        </div>
-
-                                        <div className="mb-4">
-                                            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                                                Description (Optional)
-                                            </label>
-                                            <textarea
-                                                id="description"
-                                                value={data.description}
-                                                onChange={(e) => setData('description', e.target.value)}
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                rows="3"
-                                                placeholder="Enter board description"
-                                            />
-                                            {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
-                                        </div>
-
-                                        <div className="flex gap-2">
-                                            <PrimaryButton type="submit" disabled={processing}>
-                                                {processing ? 'Creating...' : 'Create Board'}
-                                            </PrimaryButton>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setShowCreateForm(false);
-                                                    reset();
-                                                }}
-                                                className="px-4 py-2 text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300"
-                                            >
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            )}
 
                             {/* Boards Grid */}
                             {boards.length === 0 ? (
@@ -201,6 +129,12 @@ export default function Index({ boards }) {
                     </div>
                 </div>
             )}
+
+            {/* Create Board Modal */}
+            <BoardModal 
+                isOpen={showCreateModal} 
+                onClose={() => setShowCreateModal(false)} 
+            />
         </AuthenticatedLayout>
     );
 }

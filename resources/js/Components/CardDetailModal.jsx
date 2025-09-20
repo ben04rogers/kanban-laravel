@@ -112,7 +112,7 @@ export default function CardDetailModal({
                                     type="text"
                                     value={data.title}
                                     onChange={(e) => setData('title', e.target.value)}
-                                    className="w-full text-2xl font-bold text-gray-900 border-none outline-none bg-transparent"
+                                    className="w-full px-3 py-2 text-2xl font-bold text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     autoFocus
                                 />
                             ) : (
