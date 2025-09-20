@@ -120,6 +120,59 @@ export default function Show({ board, cardId = null }) {
         return () => window.removeEventListener('popstate', handlePopState);
     }, [cardId, showCardDetailModal]);
 
+    // Real-time updates via WebSockets
+    useEffect(() => {
+        if (!window.Echo) {
+            console.log('Echo not available');
+            return;
+        }
+
+        console.log('Setting up WebSocket channel for board:', board.id);
+        const channel = window.Echo.private(`board.${board.id}`);
+
+        // Listen for card creation
+        channel.listen('CardCreated', (data) => {
+            console.log('Card created event received:', data);
+            // Refresh the page to get updated data
+            router.reload({ only: ['board'] });
+        });
+
+        // Listen for card updates
+        channel.listen('CardUpdated', (data) => {
+            console.log('Card updated event received:', data);
+            // Refresh the page to get updated data
+            router.reload({ only: ['board'] });
+        });
+
+        // Listen for card moves
+        channel.listen('CardMoved', (data) => {
+            console.log('Card moved event received:', data);
+            // Refresh the page to get updated data
+            router.reload({ only: ['board'] });
+        });
+
+        // Listen for card deletions
+        channel.listen('CardDeleted', (data) => {
+            console.log('Card deleted event received:', data);
+            // Refresh the page to get updated data
+            router.reload({ only: ['board'] });
+        });
+
+        // Listen for connection events
+        channel.subscribed(() => {
+            console.log('Successfully subscribed to board channel');
+        });
+
+        channel.error((error) => {
+            console.error('Channel error:', error);
+        });
+
+        return () => {
+            console.log('Leaving board channel');
+            window.Echo.leave(`board.${board.id}`);
+        };
+    }, [board.id]);
+
     const breadcrumbItems = [
         {
             label: 'Boards',

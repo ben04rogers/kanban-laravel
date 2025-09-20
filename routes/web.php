@@ -31,4 +31,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/boards/{board}/shares/{share}', [BoardShareController::class, 'destroy'])->name('boards.shares.destroy');
 });
 
+// Broadcasting authentication routes
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::post('/broadcasting/auth', function () {
+        return response()->json(['status' => 'success']);
+    });
+    
+    // Test route for debugging
+    Route::get('/test-broadcast/{boardId}', function ($boardId) {
+        $card = \App\Models\Card::where('board_id', $boardId)->first();
+        if ($card) {
+            broadcast(new \App\Events\CardMoved($card, 1, 2, 0));
+            return response()->json(['message' => 'Test broadcast sent']);
+        }
+        return response()->json(['error' => 'No card found']);
+    });
+});
+
 require __DIR__.'/auth.php';

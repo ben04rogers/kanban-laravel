@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Events\CardCreated;
+use App\Events\CardUpdated;
+use App\Events\CardMoved;
+use App\Events\CardDeleted;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
@@ -56,6 +60,9 @@ class CardController extends Controller
             'position' => $maxPosition + 1,
         ]);
 
+        // Broadcast the card creation event
+        broadcast(new CardCreated($card));
+
         return redirect()->back()
             ->with('success', 'Card created successfully!');
     }
@@ -73,6 +80,9 @@ class CardController extends Controller
             'title' => $request->title,
             'description' => $request->description,
         ]);
+
+        // Broadcast the card update event
+        broadcast(new CardUpdated($card));
 
         return redirect()->back()
             ->with('success', 'Card updated successfully!');
@@ -99,6 +109,19 @@ class CardController extends Controller
         // Reorder cards in the new column
         $this->reorderCardsInColumn($newColumnId, $card->id, $newPosition);
 
+        // Refresh the card to get updated data
+        $card->refresh();
+
+        // Broadcast the card move event
+        \Log::info('Broadcasting CardMoved event', [
+            'card_id' => $card->id,
+            'board_id' => $card->board_id,
+            'old_column' => $oldColumnId,
+            'new_column' => $newColumnId,
+            'new_position' => $newPosition
+        ]);
+        broadcast(new CardMoved($card, $oldColumnId, $newColumnId, $newPosition));
+
         return redirect()->back();
     }
 
@@ -107,6 +130,12 @@ class CardController extends Controller
         $this->authorize('delete', $card);
 
         $boardId = $card->board_id;
+        $columnId = $card->board_column_id;
+        $cardId = $card->id;
+
+        // Broadcast the card deletion event before deleting
+        broadcast(new CardDeleted($cardId, $boardId, $columnId));
+
         $card->delete();
 
         return redirect()->route('boards.show', $boardId)
