@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Board;
 use App\Models\Card;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
@@ -28,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
         // Configure route model binding for UUIDs
         Route::model('board', Board::class);
         Route::model('card', Card::class);
+        Route::model('user', User::class);
     }
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('position')->default(0);
             $table->foreignUuid('board_id')->constrained()->onDelete('cascade');
             $table->foreignId('board_column_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
