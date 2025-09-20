@@ -144,7 +144,7 @@ export default function Index({ boards }) {
                                             
                                             {/* Content */}
                                             <div className="relative z-0">
-                                                <div className="flex justify-between items-start mb-4">
+                                                <div className="flex justify-between items-start">
                                                     <div className="flex-1">
                                                         <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                                                             {board.name}

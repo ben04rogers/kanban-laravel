@@ -157,7 +157,7 @@ export default function Show({ board, cardId = null }) {
                     {/* Board Header */}
                     <div className="bg-white shadow-sm sm:rounded-lg mb-6">
                         <div className="p-6">
-                            <div className="flex justify-between items-start mb-4">
+                            <div className="flex justify-between items-start">
                                 <div>
                                     {showEditForm ? (
                                         <form onSubmit={submit} className="space-y-4">
