@@ -5,10 +5,12 @@ import DangerButton from '@/Components/DangerButton';
 import Dropdown from '@/Components/Dropdown';
 import Breadcrumb from '@/Components/Breadcrumb';
 import { useState } from 'react';
+import { useToast } from '@/Contexts/ToastContext';
 
 export default function Index({ boards }) {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [boardToDelete, setBoardToDelete] = useState(null);
+    const { success, error } = useToast();
     
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
@@ -25,16 +27,25 @@ export default function Index({ boards }) {
         e.preventDefault();
         post(route('boards.store'), {
             onSuccess: () => {
+                success(`Board "${data.name}" created successfully!`, 'Board Created');
                 reset();
                 setShowCreateForm(false);
+            },
+            onError: () => {
+                error('Failed to create board. Please try again.');
             },
         });
     };
 
     const deleteBoard = (boardId) => {
+        const board = boards.find(b => b.id === boardId);
         router.delete(route('boards.destroy', boardId), {
             onSuccess: () => {
+                success(`Board "${board?.name}" deleted successfully!`, 'Board Deleted');
                 setBoardToDelete(null);
+            },
+            onError: () => {
+                error('Failed to delete board. Please try again.');
             },
         });
     };

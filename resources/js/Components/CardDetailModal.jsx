@@ -3,6 +3,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import { useToast } from '@/Contexts/ToastContext';
 
 export default function CardDetailModal({ 
     isOpen, 
@@ -10,6 +11,7 @@ export default function CardDetailModal({
     card 
 }) {
     const [isEditing, setIsEditing] = useState(false);
+    const { success, error } = useToast();
     
     const { data, setData, put, processing, errors, reset } = useForm({
         title: card?.title || '',
@@ -48,7 +50,11 @@ export default function CardDetailModal({
         e.preventDefault();
         put(route('cards.update', card.id), {
             onSuccess: () => {
+                success(`Card "${data.title}" updated successfully!`, 'Card Updated');
                 setIsEditing(false);
+            },
+            onError: () => {
+                error('Failed to update card. Please try again.');
             },
         });
     };
@@ -62,8 +68,12 @@ export default function CardDetailModal({
         if (confirm('Are you sure you want to delete this card? This action cannot be undone.')) {
             router.delete(route('cards.destroy', card.id), {
                 onSuccess: () => {
+                    success(`Card "${card.title}" deleted successfully!`, 'Card Deleted');
                     onClose();
-                }
+                },
+                onError: () => {
+                    error('Failed to delete card. Please try again.');
+                },
             });
         }
     };

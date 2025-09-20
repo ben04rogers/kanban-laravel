@@ -9,6 +9,7 @@ import ShareBoardModal from '@/Components/ShareBoardModal';
 import DroppableColumn from '@/Components/DroppableColumn';
 import Dropdown from '@/Components/Dropdown';
 import { useState, useEffect } from 'react';
+import { useToast } from '@/Contexts/ToastContext';
 
 export default function Show({ board, cardId = null }) {
     const [showEditForm, setShowEditForm] = useState(false);
@@ -18,6 +19,7 @@ export default function Show({ board, cardId = null }) {
     const [showShareModal, setShowShareModal] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
+    const { success, error } = useToast();
     
     const { data, setData, put, processing, errors, reset } = useForm({
         name: board.name,
@@ -28,13 +30,24 @@ export default function Show({ board, cardId = null }) {
         e.preventDefault();
         put(route('boards.update', board.id), {
             onSuccess: () => {
+                success(`Board "${data.name}" updated successfully!`, 'Board Updated');
                 setShowEditForm(false);
+            },
+            onError: () => {
+                error('Failed to update board. Please try again.');
             },
         });
     };
 
     const deleteBoard = () => {
-        router.delete(route('boards.destroy', board.id));
+        router.delete(route('boards.destroy', board.id), {
+            onSuccess: () => {
+                success(`Board "${board.name}" deleted successfully!`, 'Board Deleted');
+            },
+            onError: () => {
+                error('Failed to delete board. Please try again.');
+            },
+        });
     };
 
     const openCardModal = (column = null) => {

@@ -2,6 +2,7 @@ import { useForm } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+import { useToast } from '@/Contexts/ToastContext';
 
 export default function CardModal({ 
     isOpen, 
@@ -11,6 +12,7 @@ export default function CardModal({
     columnName,
     columns = []
 }) {
+    const { success, error } = useToast();
     const { data, setData, post, processing, errors, reset } = useForm({
         title: '',
         description: '',
@@ -31,8 +33,12 @@ export default function CardModal({
         e.preventDefault();
         post(route('cards.store'), {
             onSuccess: () => {
+                success(`Card "${data.title}" created successfully!`, 'Card Created');
                 reset();
                 onClose();
+            },
+            onError: () => {
+                error('Failed to create card. Please try again.');
             },
         });
     };
