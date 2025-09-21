@@ -45,7 +45,7 @@ export default function BoardModal({ isOpen, onClose }) {
                     {/* Header */}
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-medium text-gray-900">
-                            Create New Board
+                            Create Board
                         </h3>
                         <button
                             onClick={handleClose}
