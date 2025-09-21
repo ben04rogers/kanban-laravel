@@ -123,36 +123,16 @@ class TestSeeder extends Seeder
 
     private function createBoardColumns($boards)
     {
-        $columnTemplates = [
-            [
-                ['name' => 'Backlog', 'position' => 0],
-                ['name' => 'Sprint Planning', 'position' => 1],
-                ['name' => 'In Progress', 'position' => 2],
-                ['name' => 'Code Review', 'position' => 3],
-                ['name' => 'Testing', 'position' => 4],
-                ['name' => 'Done', 'position' => 5],
-            ],
-            [
-                ['name' => 'Design Research', 'position' => 0],
-                ['name' => 'Wireframes', 'position' => 1],
-                ['name' => 'Prototyping', 'position' => 2],
-                ['name' => 'Design Review', 'position' => 3],
-                ['name' => 'Handoff to Dev', 'position' => 4],
-                ['name' => 'Completed', 'position' => 5],
-            ],
-            [
-                ['name' => 'Planning', 'position' => 0],
-                ['name' => 'Development', 'position' => 1],
-                ['name' => 'Testing', 'position' => 2],
-                ['name' => 'Deployment', 'position' => 3],
-                ['name' => 'Monitoring', 'position' => 4],
-            ],
+        $standardColumns = [
+            ['name' => 'To Do', 'position' => 0],
+            ['name' => 'In Progress', 'position' => 1],
+            ['name' => 'Code Review', 'position' => 2],
+            ['name' => 'Testing', 'position' => 3],
+            ['name' => 'Done', 'position' => 4],
         ];
 
-        foreach ($boards as $index => $board) {
-            $columns = $index === 3 ? $columnTemplates[1] : ($index === 2 ? $columnTemplates[2] : $columnTemplates[0]);
-            
-            foreach ($columns as $columnData) {
+        foreach ($boards as $board) {
+            foreach ($standardColumns as $columnData) {
                 BoardColumn::create([
                     'name' => $columnData['name'],
                     'position' => $columnData['position'],
@@ -175,13 +155,13 @@ class TestSeeder extends Seeder
             [
                 'title' => 'Build Real-time Collaboration System',
                 'description' => 'Implement WebSocket connections for real-time updates when multiple users are editing the same board simultaneously.',
-                'column' => 'Sprint Planning',
+                'column' => 'To Do',
                 'assignee' => $users[2], // Emily Johnson (Full-stack Developer)
             ],
             [
                 'title' => 'Create Advanced Filtering System',
                 'description' => 'Add filters for cards by assignee, due date, labels, and custom fields. Include saved filter presets.',
-                'column' => 'Backlog',
+                'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
@@ -209,13 +189,13 @@ class TestSeeder extends Seeder
             [
                 'title' => 'Implement Offline Mode',
                 'description' => 'Allow users to view and edit boards when offline. Sync changes when connection is restored.',
-                'column' => 'Development',
+                'column' => 'In Progress',
                 'assignee' => $users[3], // David Kim (Mobile Developer)
             ],
             [
                 'title' => 'Add Push Notifications',
                 'description' => 'Notify users about card assignments, due dates, and mentions. Include notification preferences.',
-                'column' => 'Planning',
+                'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
@@ -227,7 +207,7 @@ class TestSeeder extends Seeder
             [
                 'title' => 'Add Biometric Authentication',
                 'description' => 'Implement fingerprint and face ID authentication for mobile app security.',
-                'column' => 'Development',
+                'column' => 'Code Review',
                 'assignee' => $users[3], // David Kim
             ],
         ];
@@ -237,25 +217,25 @@ class TestSeeder extends Seeder
             [
                 'title' => 'Set up Kubernetes Cluster',
                 'description' => 'Deploy application to Kubernetes with proper scaling, health checks, and resource limits.',
-                'column' => 'Planning',
+                'column' => 'To Do',
                 'assignee' => $users[6], // James Wilson (DevOps)
             ],
             [
                 'title' => 'Implement CI/CD Pipeline',
                 'description' => 'Create automated testing, building, and deployment pipeline with GitHub Actions.',
-                'column' => 'Development',
+                'column' => 'In Progress',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Set up Monitoring & Alerting',
                 'description' => 'Configure Prometheus, Grafana, and alerting for application performance and error tracking.',
-                'column' => 'Deployment',
+                'column' => 'Code Review',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Database Backup Strategy',
                 'description' => 'Implement automated daily backups with point-in-time recovery capabilities.',
-                'column' => 'Monitoring',
+                'column' => 'Testing',
                 'assignee' => $users[6], // James Wilson
             ],
         ];
@@ -265,31 +245,31 @@ class TestSeeder extends Seeder
             [
                 'title' => 'Create Design System Documentation',
                 'description' => 'Document all components, colors, typography, and spacing guidelines for consistent design.',
-                'column' => 'Design Review',
+                'column' => 'Code Review',
                 'assignee' => $users[5], // Lisa Park (UX Designer)
             ],
             [
                 'title' => 'Conduct User Research for Mobile',
                 'description' => 'Interview 10 mobile users to understand their workflow and pain points with current mobile experience.',
-                'column' => 'Design Research',
+                'column' => 'To Do',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Design Dark Mode Theme',
                 'description' => 'Create comprehensive dark mode design for all components and pages.',
-                'column' => 'Prototyping',
+                'column' => 'In Progress',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Redesign Onboarding Flow',
                 'description' => 'Simplify the new user onboarding process with better visual guidance and fewer steps.',
-                'column' => 'Wireframes',
+                'column' => 'Testing',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Accessibility Audit & Improvements',
                 'description' => 'Audit current interface for WCAG compliance and implement necessary improvements.',
-                'column' => 'Handoff to Dev',
+                'column' => 'Done',
                 'assignee' => $users[5], // Lisa Park
             ],
         ];
