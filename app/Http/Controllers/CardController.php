@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use App\Models\Board;
 use App\Models\BoardColumn;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCardRequest;
+use App\Http\Requests\UpdateCardRequest;
+use App\Http\Requests\MoveCardRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
 
@@ -31,17 +33,9 @@ class CardController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreCardRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:50000',
-            'board_id' => 'required|exists:boards,id',
-            'board_column_id' => 'required|exists:board_columns,id',
-        ]);
-
         $board = Board::findOrFail($request->board_id);
-        $this->authorize('view', $board);
 
         // Get the highest position in the column
         $maxPosition = Card::where('board_column_id', $request->board_column_id)
@@ -60,14 +54,8 @@ class CardController extends Controller
             ->with('success', 'Card created successfully!');
     }
 
-    public function update(Request $request, Card $card)
+    public function update(UpdateCardRequest $request, Card $card)
     {
-        $this->authorize('update', $card);
-
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:50000',
-        ]);
 
         $card->update([
             'title' => $request->title,
@@ -78,14 +66,8 @@ class CardController extends Controller
             ->with('success', 'Card updated successfully!');
     }
 
-    public function move(Request $request, Card $card)
+    public function move(MoveCardRequest $request, Card $card)
     {
-        $this->authorize('update', $card);
-
-        $request->validate([
-            'board_column_id' => 'required|exists:board_columns,id',
-            'position' => 'required|integer|min:0',
-        ]);
 
         $oldColumnId = $card->board_column_id;
         $newColumnId = $request->board_column_id;

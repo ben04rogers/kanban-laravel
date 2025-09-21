@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreBoardRequest;
+use App\Http\Requests\UpdateBoardRequest;
+use App\Http\Requests\ReorderColumnsRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
 
@@ -14,12 +16,29 @@ class BoardController extends Controller
 
     public function index()
     {
-        $boards = auth()->user()->boards()->with(['columns' => function($query) {
+        // Get owned boards
+        $ownedBoards = auth()->user()->boards()->with(['columns' => function($query) {
             $query->orderBy('position');
         }])->get();
+        
+        // Get shared boards
+        $sharedBoards = auth()->user()->sharedBoards()->with(['columns' => function($query) {
+            $query->orderBy('position');
+        }])->get();
+        
+        // Combine and mark ownership
+        $allBoards = $ownedBoards->map(function($board) {
+            $board->is_owner = true;
+            return $board;
+        })->concat(
+            $sharedBoards->map(function($board) {
+                $board->is_owner = false;
+                return $board;
+            })
+        );
 
         return Inertia::render('Boards/Index', [
-            'boards' => $boards
+            'boards' => $allBoards
         ]);
     }
 
@@ -42,12 +61,8 @@ class BoardController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(StoreBoardRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
 
         $board = auth()->user()->boards()->create([
             'name' => $request->name,
@@ -61,14 +76,8 @@ class BoardController extends Controller
             ->with('success', 'Board created successfully!');
     }
 
-    public function update(Request $request, Board $board)
+    public function update(UpdateBoardRequest $request, Board $board)
     {
-        $this->authorize('update', $board);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-        ]);
 
         $board->update([
             'name' => $request->name,
@@ -89,15 +98,8 @@ class BoardController extends Controller
             ->with('success', 'Board deleted successfully!');
     }
 
-    public function reorderColumns(Request $request, Board $board)
+    public function reorderColumns(ReorderColumnsRequest $request, Board $board)
     {
-        $this->authorize('update', $board);
-
-        $request->validate([
-            'columns' => 'required|array',
-            'columns.*.id' => 'required|exists:board_columns,id',
-            'columns.*.position' => 'required|integer|min:0',
-        ]);
 
         foreach ($request->columns as $columnData) {
             $board->columns()->where('id', $columnData['id'])->update([
