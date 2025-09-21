@@ -92,7 +92,8 @@ export default function CardDetailModal({
                 <div className="mt-3">
                     {/* Header with close button */}
                     <div className="flex items-center justify-between mb-4">
-                        <div className="flex-1"></div>
+                        {!isEditing && <h1 className="text-2xl font-bold text-gray-900">{card.title}</h1>}
+                        {isEditing && <div className="flex-1"></div>}
                         <button
                             onClick={handleClose}
                             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -105,9 +106,9 @@ export default function CardDetailModal({
 
                     {/* Card Content */}
                     <div className="space-y-6">
-                        {/* Card Title */}
-                        <div>
-                            {isEditing ? (
+                        {/* Card Title (when editing) */}
+                        {isEditing && (
+                            <div>
                                 <input
                                     type="text"
                                     value={data.title}
@@ -115,11 +116,9 @@ export default function CardDetailModal({
                                     className="w-full px-3 py-2 text-2xl font-bold text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     autoFocus
                                 />
-                            ) : (
-                                <h1 className="text-2xl font-bold text-gray-900">{card.title}</h1>
-                            )}
-                            {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
-                        </div>
+                                {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
+                            </div>
+                        )}
 
                         {/* Card Meta */}
                         <div className="space-y-4">
