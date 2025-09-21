@@ -94,33 +94,6 @@ The seeder creates several test users. All users have the password: `password`
 - **Rich Text**: TinyMCE Editor
 - **Authentication**: Laravel Breeze with Inertia
 
-## Project Structure
-
-The application follows Laravel conventions with additional React components:
-
-```
-app/
-├── Http/Controllers/     # API controllers for boards, cards, and sharing
-├── Models/              # Eloquent models for User, Board, Card, BoardShare
-├── Policies/            # Authorization policies for boards and cards
-└── Requests/            # Form request validation classes
-
-resources/js/
-├── Components/          # Reusable React components
-│   ├── CardModal.jsx    # Create/edit card modal
-│   ├── CardDetailModal.jsx # Detailed card view with editing
-│   ├── UserDropdown.jsx # User selection component
-│   └── ...
-├── Pages/               # Inertia page components
-│   ├── Boards/          # Board listing and detail views
-│   └── Auth/            # Authentication pages
-└── Layouts/             # Application layouts
-
-database/
-├── migrations/          # Database schema migrations
-└── seeders/            # Test data seeders
-```
-
 ## Screenshots
 
 > A tour of the main features. Images are stored in `docs/screenshots/`.
