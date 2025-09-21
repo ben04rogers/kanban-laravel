@@ -20,35 +20,35 @@ class TestSeeder extends Seeder
         $users = [
             [
                 'name' => 'Sarah Chen',
-                'email' => 'sarah.chen@taskflow.com',
+                'email' => 'sarah.chen@email.com',
             ],
             [
                 'name' => 'Marcus Rodriguez',
-                'email' => 'marcus.rodriguez@taskflow.com',
+                'email' => 'marcus.rodriguez@email.com',
             ],
             [
                 'name' => 'Emily Johnson',
-                'email' => 'emily.johnson@taskflow.com',
+                'email' => 'emily.johnson@email.com',
             ],
             [
                 'name' => 'David Kim',
-                'email' => 'david.kim@taskflow.com',
+                'email' => 'david.kim@email.com',
             ],
             [
                 'name' => 'Alex Thompson',
-                'email' => 'alex.thompson@taskflow.com',
+                'email' => 'alex.thompson@email.com',
             ],
             [
                 'name' => 'Lisa Park',
-                'email' => 'lisa.park@taskflow.com',
+                'email' => 'lisa.park@email.com',
             ],
             [
                 'name' => 'James Wilson',
-                'email' => 'james.wilson@taskflow.com',
+                'email' => 'james.wilson@email.com',
             ],
             [
                 'name' => 'Maria Garcia',
-                'email' => 'maria.garcia@taskflow.com',
+                'email' => 'maria.garcia@email.com',
             ],
         ];
 
