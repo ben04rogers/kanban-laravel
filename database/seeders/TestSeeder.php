@@ -182,6 +182,42 @@ class TestSeeder extends Seeder
                 'column' => 'Done',
                 'assignee' => $users[6], // James Wilson (DevOps)
             ],
+            [
+                'title' => 'Implement Search Functionality',
+                'description' => 'Add global search across boards, cards, and descriptions with advanced query capabilities.',
+                'column' => 'To Do',
+                'assignee' => $users[2], // Emily Johnson
+            ],
+            [
+                'title' => 'Add Card Templates',
+                'description' => 'Create reusable card templates for common task types to speed up project setup.',
+                'column' => 'In Progress',
+                'assignee' => $users[4], // Alex Thompson
+            ],
+            [
+                'title' => 'Implement Activity Feed',
+                'description' => 'Track and display all board activities including card moves, assignments, and comments.',
+                'column' => 'Code Review',
+                'assignee' => $users[1], // Marcus Rodriguez
+            ],
+            [
+                'title' => 'Add Custom Fields to Cards',
+                'description' => 'Allow users to add custom fields like priority, effort estimation, and due dates.',
+                'column' => 'Testing',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Implement Board Templates',
+                'description' => 'Create predefined board layouts for different project types (Sprint, Bug Tracking, etc.).',
+                'column' => 'Done',
+                'assignee' => $users[0], // Sarah Chen (Project Manager)
+            ],
+            [
+                'title' => 'Add Keyboard Shortcuts',
+                'description' => 'Implement keyboard shortcuts for common actions like creating cards, moving between boards.',
+                'column' => 'To Do',
+                'assignee' => $users[4], // Alex Thompson
+            ],
         ];
 
         // Mobile App Cards
@@ -210,6 +246,42 @@ class TestSeeder extends Seeder
                 'column' => 'Code Review',
                 'assignee' => $users[3], // David Kim
             ],
+            [
+                'title' => 'Implement Gesture Navigation',
+                'description' => 'Add swipe gestures for card navigation and board switching for better mobile UX.',
+                'column' => 'To Do',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Add Haptic Feedback',
+                'description' => 'Implement haptic feedback for card interactions, drag operations, and notifications.',
+                'column' => 'In Progress',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Create Widget Support',
+                'description' => 'Add iOS and Android home screen widgets showing board overview and quick actions.',
+                'column' => 'Code Review',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Implement Dark Mode',
+                'description' => 'Add system-aware dark mode support with smooth theme transitions.',
+                'column' => 'Testing',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Add Voice Commands',
+                'description' => 'Implement voice-to-text for card creation and basic voice navigation commands.',
+                'column' => 'To Do',
+                'assignee' => $users[3], // David Kim
+            ],
+            [
+                'title' => 'Optimize for Tablets',
+                'description' => 'Enhance tablet experience with multi-column layouts and larger touch targets.',
+                'column' => 'Done',
+                'assignee' => $users[3], // David Kim
+            ],
         ];
 
         // DevOps Cards
@@ -236,6 +308,42 @@ class TestSeeder extends Seeder
                 'title' => 'Database Backup Strategy',
                 'description' => 'Implement automated daily backups with point-in-time recovery capabilities.',
                 'column' => 'Testing',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Implement Blue-Green Deployment',
+                'description' => 'Set up zero-downtime deployment strategy with automatic rollback capabilities.',
+                'column' => 'To Do',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Configure Auto-scaling',
+                'description' => 'Implement horizontal pod autoscaling based on CPU and memory usage metrics.',
+                'column' => 'In Progress',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Set up Log Aggregation',
+                'description' => 'Implement centralized logging with ELK stack for better debugging and analysis.',
+                'column' => 'Code Review',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Implement Security Scanning',
+                'description' => 'Add automated security scanning for dependencies and container vulnerabilities.',
+                'column' => 'Testing',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Create Disaster Recovery Plan',
+                'description' => 'Document and test disaster recovery procedures with RTO/RPO targets.',
+                'column' => 'Done',
+                'assignee' => $users[6], // James Wilson
+            ],
+            [
+                'title' => 'Optimize Database Performance',
+                'description' => 'Implement database indexing, query optimization, and connection pooling.',
+                'column' => 'To Do',
                 'assignee' => $users[6], // James Wilson
             ],
         ];
@@ -270,6 +378,42 @@ class TestSeeder extends Seeder
                 'title' => 'Accessibility Audit & Improvements',
                 'description' => 'Audit current interface for WCAG compliance and implement necessary improvements.',
                 'column' => 'Done',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Create User Journey Maps',
+                'description' => 'Map out complete user journeys from signup to advanced board management.',
+                'column' => 'To Do',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Design Mobile-First Components',
+                'description' => 'Create mobile-optimized versions of all UI components with touch-friendly interactions.',
+                'column' => 'In Progress',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Implement Micro-interactions',
+                'description' => 'Add subtle animations and transitions to enhance user experience and provide feedback.',
+                'column' => 'Code Review',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Create Brand Guidelines',
+                'description' => 'Establish comprehensive brand guidelines including logo usage, color palettes, and voice.',
+                'column' => 'Testing',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Design Error States & Empty States',
+                'description' => 'Create helpful and engaging designs for error messages and empty board states.',
+                'column' => 'Done',
+                'assignee' => $users[5], // Lisa Park
+            ],
+            [
+                'title' => 'Conduct A/B Testing Framework',
+                'description' => 'Set up testing framework for different UI variations and user flows.',
+                'column' => 'To Do',
                 'assignee' => $users[5], // Lisa Park
             ],
         ];
