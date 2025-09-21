@@ -4,18 +4,22 @@ import DangerButton from '@/Components/DangerButton';
 import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useToast } from '@/Contexts/ToastContext';
+import UserDropdown from '@/Components/UserDropdown';
 
 export default function CardDetailModal({ 
     isOpen, 
     onClose, 
-    card 
+    card,
+    boardUsers = []
 }) {
     const [isEditing, setIsEditing] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
     const { success, error } = useToast();
     
     const { data, setData, put, processing, errors, reset } = useForm({
         title: card?.title || '',
         description: card?.description || '',
+        assigned_user_id: card?.user?.id || null,
     });
 
     // Reset form when modal opens/closes or card changes
@@ -24,13 +28,22 @@ export default function CardDetailModal({
             setData({
                 title: card.title,
                 description: card.description || '',
+                assigned_user_id: card.user?.id || null,
             });
+            setSelectedUser(card.user || null);
             setIsEditing(false);
         } else if (!isOpen) {
             reset();
+            setSelectedUser(null);
             setIsEditing(false);
         }
-    }, [isOpen, card]);
+    }, [isOpen, card, boardUsers]);
+
+    // Handle user selection
+    const handleUserSelect = (user) => {
+        setSelectedUser(user);
+        setData('assigned_user_id', user?.id || null);
+    };
 
     // Handle Escape key to close modal
     useEffect(() => {
@@ -127,18 +140,29 @@ export default function CardDetailModal({
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Assigned User
                                 </label>
-                                <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
-                                    {card.user ? (
-                                        <div className="flex items-center space-x-2">
-                                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                                {card.user.name.charAt(0).toUpperCase()}
+                                {isEditing ? (
+                                    <UserDropdown
+                                        users={boardUsers}
+                                        selectedUser={selectedUser}
+                                        onSelect={handleUserSelect}
+                                        placeholder="Search and select a user..."
+                                        className="w-full"
+                                    />
+                                ) : (
+                                    <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
+                                        {card.user ? (
+                                            <div className="flex items-center space-x-2">
+                                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                                    {card.user.name.charAt(0).toUpperCase()}
+                                                </div>
+                                                <span className="text-gray-900">{card.user.name}</span>
                                             </div>
-                                            <span className="text-gray-900">{card.user.name}</span>
-                                        </div>
-                                    ) : (
-                                        <span className="text-gray-400 italic">Unassigned</span>
-                                    )}
-                                </div>
+                                        ) : (
+                                            <span className="text-gray-400 italic">Unassigned</span>
+                                        )}
+                                    </div>
+                                )}
+                                {errors.assigned_user_id && <div className="text-red-500 text-sm mt-1">{errors.assigned_user_id}</div>}
                             </div>
                             
                             {/* Created Date */}

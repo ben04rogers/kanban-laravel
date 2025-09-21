@@ -23,12 +23,27 @@ class CardController extends Controller
         
         // Load the board with all necessary relationships
         $board = $card->board;
-        $board->load(['columns.cards.user' => function($query) {
-            $query->orderBy('position');
-        }]);
+        $board->load([
+            'columns' => function($query) {
+                $query->orderBy('position');
+            },
+            'columns.cards.user' => function($query) {
+                $query->orderBy('position');
+            },
+            'user',
+            'sharedWith'
+        ]);
+
+        // Get all users with access to the board (owner + shared users)
+        $boardUsers = collect()
+            ->push($board->user)
+            ->merge($board->sharedWith)
+            ->unique('id')
+            ->values();
 
         return Inertia::render('Boards/Show', [
             'board' => $board,
+            'boardUsers' => $boardUsers,
             'cardId' => $card->id
         ]);
     }
@@ -46,7 +61,7 @@ class CardController extends Controller
             'description' => $request->description,
             'board_id' => $request->board_id,
             'board_column_id' => $request->board_column_id,
-            'user_id' => $request->assigned_user_id ?? auth()->id(),
+            'user_id' => $request->assigned_user_id,
             'position' => $maxPosition + 1,
         ]);
 
@@ -60,6 +75,7 @@ class CardController extends Controller
         $card->update([
             'title' => $request->title,
             'description' => $request->description,
+            'user_id' => $request->assigned_user_id,
         ]);
 
         return redirect()->back()

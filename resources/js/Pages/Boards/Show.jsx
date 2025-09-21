@@ -322,6 +322,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                 isOpen={showCardDetailModal}
                 onClose={closeCardDetailModal}
                 card={selectedCard}
+                boardUsers={boardUsers}
             />
 
             {/* Share Board Modal */}

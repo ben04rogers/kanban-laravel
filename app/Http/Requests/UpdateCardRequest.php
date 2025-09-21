@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Card;
+use App\Models\Board;
 
 class UpdateCardRequest extends FormRequest
 {
@@ -17,6 +18,28 @@ class UpdateCardRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->assigned_user_id) {
+                $card = $this->route('card');
+                if ($card) {
+                    $board = $card->board;
+                    // Check if the assigned user has access to the board
+                    $hasAccess = $board->user_id === $this->assigned_user_id || 
+                                $board->shares()->where('user_id', $this->assigned_user_id)->exists();
+                    
+                    if (!$hasAccess) {
+                        $validator->errors()->add('assigned_user_id', 'The selected user does not have access to this board.');
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -26,6 +49,7 @@ class UpdateCardRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:50000',
+            'assigned_user_id' => 'nullable|exists:users,id',
         ];
     }
 
