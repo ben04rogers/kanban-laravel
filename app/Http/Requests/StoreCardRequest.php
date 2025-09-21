@@ -18,6 +18,27 @@ class StoreCardRequest extends FormRequest
     }
 
     /**
+     * Configure the validator instance.
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->assigned_user_id) {
+                $board = Board::find($this->board_id);
+                if ($board) {
+                    // Check if the assigned user has access to the board
+                    $hasAccess = $board->user_id === $this->assigned_user_id || 
+                                $board->shares()->where('user_id', $this->assigned_user_id)->exists();
+                    
+                    if (!$hasAccess) {
+                        $validator->errors()->add('assigned_user_id', 'The selected user does not have access to this board.');
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -29,6 +50,7 @@ class StoreCardRequest extends FormRequest
             'description' => 'nullable|string|max:50000',
             'board_id' => 'required|exists:boards,id',
             'board_column_id' => 'required|exists:board_columns,id',
+            'assigned_user_id' => 'nullable|exists:users,id',
         ];
     }
 

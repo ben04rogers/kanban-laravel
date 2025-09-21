@@ -37,11 +37,20 @@ class BoardController extends Controller
             'columns.cards.user' => function($query) {
                 $query->orderBy('position');
             },
-            'user'
+            'user',
+            'sharedWith'
         ]);
 
+        // Get all users with access to the board (owner + shared users)
+        $boardUsers = collect()
+            ->push($board->user)
+            ->merge($board->sharedWith)
+            ->unique('id')
+            ->values();
+
         return Inertia::render('Boards/Show', [
-            'board' => $board
+            'board' => $board,
+            'boardUsers' => $boardUsers
         ]);
     }
 

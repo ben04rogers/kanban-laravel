@@ -3,6 +3,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useToast } from '@/Contexts/ToastContext';
+import UserDropdown from '@/Components/UserDropdown';
 
 export default function CardModal({ 
     isOpen, 
@@ -10,14 +11,17 @@ export default function CardModal({
     boardId, 
     columnId, 
     columnName,
-    columns = []
+    columns = [],
+    boardUsers = []
 }) {
     const { success, error } = useToast();
+    const [selectedUser, setSelectedUser] = useState(null);
     const { data, setData, post, processing, errors, reset } = useForm({
         title: '',
         description: '',
         board_id: boardId,
         board_column_id: columnId || '',
+        assigned_user_id: null,
     });
 
     // Reset form when modal opens/closes
@@ -26,8 +30,15 @@ export default function CardModal({
             setData('board_column_id', columnId || '');
         } else {
             reset();
+            setSelectedUser(null);
         }
     }, [isOpen, columnId]);
+
+    // Handle user selection
+    const handleUserSelect = (user) => {
+        setSelectedUser(user);
+        setData('assigned_user_id', user?.id || null);
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -45,6 +56,7 @@ export default function CardModal({
 
     const handleClose = () => {
         reset();
+        setSelectedUser(null);
         onClose();
     };
 
@@ -108,6 +120,20 @@ export default function CardModal({
                                 autoFocus
                             />
                             {errors.title && <div className="text-red-500 text-sm mt-1">{errors.title}</div>}
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="assigned_user" className="block text-sm font-medium text-gray-700 mb-2">
+                                Assign to User
+                            </label>
+                            <UserDropdown
+                                users={boardUsers}
+                                selectedUser={selectedUser}
+                                onSelect={handleUserSelect}
+                                placeholder="Search and select a user..."
+                                className="w-full"
+                            />
+                            {errors.assigned_user_id && <div className="text-red-500 text-sm mt-1">{errors.assigned_user_id}</div>}
                         </div>
 
                         <div className="mb-6">

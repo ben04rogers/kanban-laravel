@@ -77,8 +77,20 @@ export default function DraggableCard({
             } ${isDragging ? 'opacity-50' : ''}`}
         >
             <h4 className="font-medium text-gray-900 mb-2">{card.title}</h4>
-            <div className="text-xs text-gray-500">
-                Created by {card.user?.name} • {new Date(card.created_at).toLocaleDateString()}
+            <div className="flex items-center justify-between">
+                {card.user ? (
+                    <div className="flex items-center space-x-1">
+                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                            {card.user.name.charAt(0).toUpperCase()}
+                        </div>
+                        <span className="text-xs text-gray-600">{card.user.name}</span>
+                    </div>
+                ) : (
+                    <span className="text-xs text-gray-400 italic">Unassigned</span>
+                )}
+                <span className="text-xs text-gray-400">
+                    {new Date(card.created_at).toLocaleDateString()}
+                </span>
             </div>
         </div>
     );

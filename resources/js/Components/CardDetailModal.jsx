@@ -122,8 +122,35 @@ export default function CardDetailModal({
                         </div>
 
                         {/* Card Meta */}
-                        <div className="gap-4 text-sm text-gray-500">
-                            <p>Created by {card.user?.name} on {new Date(card.created_at).toLocaleDateString()}</p>
+                        <div className="space-y-4">
+                            {/* Assigned User */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Assigned User
+                                </label>
+                                <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
+                                    {card.user ? (
+                                        <div className="flex items-center space-x-2">
+                                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+                                                {card.user.name.charAt(0).toUpperCase()}
+                                            </div>
+                                            <span className="text-gray-900">{card.user.name}</span>
+                                        </div>
+                                    ) : (
+                                        <span className="text-gray-400 italic">Unassigned</span>
+                                    )}
+                                </div>
+                            </div>
+                            
+                            {/* Created Date */}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Created Date
+                                </label>
+                                <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+                                    {new Date(card.created_at).toLocaleDateString()}
+                                </div>
+                            </div>
                         </div>
 
                         {/* Card Description */}

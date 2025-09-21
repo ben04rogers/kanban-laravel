@@ -12,7 +12,7 @@ import Dropdown from '@/Components/Dropdown';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/Contexts/ToastContext';
 
-export default function Show({ board, cardId = null }) {
+export default function Show({ board, boardUsers = [], cardId = null }) {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCardModal, setShowCardModal] = useState(false);
@@ -314,6 +314,7 @@ export default function Show({ board, cardId = null }) {
                 columnId={selectedColumn?.id}
                 columnName={selectedColumn?.name}
                 columns={board.columns}
+                boardUsers={boardUsers}
             />
 
             {/* Card Detail Modal */}

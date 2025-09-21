@@ -46,7 +46,7 @@ class CardController extends Controller
             'description' => $request->description,
             'board_id' => $request->board_id,
             'board_column_id' => $request->board_column_id,
-            'user_id' => auth()->id(),
+            'user_id' => $request->assigned_user_id ?? auth()->id(),
             'position' => $maxPosition + 1,
         ]);
 
