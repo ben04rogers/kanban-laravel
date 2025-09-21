@@ -11,28 +11,14 @@ class HomeController extends Controller
     public function index()
     {
         if (auth()->check()) {
-            // Get owned boards
-            $ownedBoards = auth()->user()->boards()->with(['columns' => function($query) {
-                $query->orderBy('position');
-            }])->get();
+            $user = auth()->user();
+            $withColumns = ['columns' => fn($query) => $query->orderBy('position')];
             
-            // Get shared boards
-            $sharedBoards = auth()->user()->sharedBoards()->with(['columns' => function($query) {
-                $query->orderBy('position');
-            }])->get();
+            $boards = collect()
+                ->merge($user->boards()->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', true)))
+                ->merge($user->sharedBoards()->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', false)));
             
-            // Combine and mark ownership
-            $allBoards = $ownedBoards->map(function($board) {
-                $board->is_owner = true;
-                return $board;
-            })->concat(
-                $sharedBoards->map(function($board) {
-                    $board->is_owner = false;
-                    return $board;
-                })
-            );
-            
-            return Inertia::render('Boards/Index', ['boards' => $allBoards]);
+            return Inertia::render('Boards/Index', compact('boards'));
         }
         
         return Inertia::render('Welcome', [
