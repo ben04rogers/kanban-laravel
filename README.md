@@ -101,29 +101,35 @@ The seeder creates several test users. All users have the password: `password`
 <table>
   <tr>
     <td align="center" valign="top" width="50%">
+      <img src="docs/screenshots/landing-page.png" alt="Landing Page" width="100%" />
+      <div><sub><b>Landing Page</b> — Welcome to Velocity Kanban Board</sub></div>
+    </td>
+    <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/boards-index.png" alt="Boards Index" width="100%" />
       <div><sub><b>Boards Index</b> — Overview of all accessible boards</sub></div>
     </td>
+  </tr>
+  <tr>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/kanban-board.png" alt="Kanban Board" width="100%" />
       <div><sub><b>Kanban Board</b> — Drag-and-drop task management interface</sub></div>
     </td>
-  </tr>
-  <tr>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/card-detail.png" alt="Card Detail" width="100%" />
       <div><sub><b>Card Detail</b> — Detailed view with editing capabilities</sub></div>
     </td>
+  </tr>
+  <tr>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/create-card.png" alt="Create Card" width="100%" />
       <div><sub><b>Create Card</b> — Add new tasks with user assignment</sub></div>
     </td>
-  </tr>
-  <tr>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/user-assignment.png" alt="User Assignment" width="100%" />
       <div><sub><b>User Assignment</b> — Assign tasks to team members</sub></div>
     </td>
+  </tr>
+  <tr>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/board-sharing.png" alt="Board Sharing" width="100%" />
       <div><sub><b>Board Sharing</b> — Collaborate with team members</sub></div>
