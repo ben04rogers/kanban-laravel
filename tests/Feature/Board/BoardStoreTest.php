@@ -1,15 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Board;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
-class BoardTest extends TestCase
+class BoardStoreTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -131,70 +130,5 @@ class BoardTest extends TestCase
 
         $response->assertSessionHasErrors(['description']);
         $response->assertSessionHasErrors(['description' => 'The board description may not be greater than 1000 characters.']);
-    }
-
-    public function test_board_show_page_displays_correct_inertia_data()
-    {
-        $user = User::factory()->create();
-        $board = Board::factory()->create([
-            'user_id' => $user->id,
-            'name' => 'Test Board',
-            'description' => 'Test Description'
-        ]);
-        
-        // Create some columns for the board
-        BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'To Do', 'position' => 0]);
-        BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'In Progress', 'position' => 1]);
-
-        $response = $this->actingAs($user)
-            ->get("/boards/{$board->id}");
-
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('Boards/Show')
-            ->has('board', fn (Assert $boardAssert) => $boardAssert
-                ->where('id', $board->id)
-                ->where('name', 'Test Board')
-                ->where('description', 'Test Description')
-                ->has('columns', 2)
-                ->has('columns.0', fn (Assert $column) => $column
-                    ->where('name', 'To Do')
-                    ->where('position', 0)
-                    ->etc()
-                )
-                ->has('columns.1', fn (Assert $column) => $column
-                    ->where('name', 'In Progress')
-                    ->where('position', 1)
-                    ->etc()
-                )
-                ->has('user')
-                ->etc()
-            )
-            ->has('boardUsers')
-        );
-    }
-
-    public function test_board_index_page_displays_user_boards()
-    {
-        $user = User::factory()->create();
-        $board1 = Board::factory()->create(['user_id' => $user->id, 'name' => 'My Board 1']);
-        $board2 = Board::factory()->create(['user_id' => $user->id, 'name' => 'My Board 2']);
-
-        $response = $this->actingAs($user)
-            ->get('/boards');
-
-        $response->assertInertia(fn (Assert $page) => $page
-            ->component('Boards/Index')
-            ->has('boards', 2)
-            ->has('boards.0', fn (Assert $board) => $board
-                ->where('name', 'My Board 1')
-                ->where('is_owner', true)
-                ->etc()
-            )
-            ->has('boards.1', fn (Assert $board) => $board
-                ->where('name', 'My Board 2')
-                ->where('is_owner', true)
-                ->etc()
-            )
-        );
     }
 }

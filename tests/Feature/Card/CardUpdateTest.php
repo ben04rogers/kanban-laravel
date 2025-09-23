@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Card;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
