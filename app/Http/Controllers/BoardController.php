@@ -48,6 +48,9 @@ class BoardController extends Controller
             ->unique('id')
             ->values();
 
+        // Check if current user is the board creator
+        $board->is_creator = auth()->id() === $board->user_id;
+
         return Inertia::render('Boards/Show', [
             'board' => $board,
             'boardUsers' => $boardUsers
