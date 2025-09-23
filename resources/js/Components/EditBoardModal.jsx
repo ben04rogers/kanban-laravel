@@ -13,6 +13,7 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
     const { data, setData, put, processing, errors, reset } = useForm({
         name: board.name || '',
         description: board.description || '',
+        columns: board.columns || [],
     });
 
     // Reset form when modal opens/closes
@@ -22,16 +23,43 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
             setData({
                 name: board.name || '',
                 description: board.description || '',
+                columns: board.columns || [],
             });
         }
     }, [isOpen, board]);
 
     const submit = (e) => {
         e.preventDefault();
+        
+        // Prepare column data with updated positions
+        const columnData = columns.map((col, idx) => ({
+            id: col.id,
+            position: idx
+        }));
+        
+        // Update form data with columns
+        setData('columns', columnData);
+        
         put(route('boards.update', board.id), {
             onSuccess: () => {
-                success(`Board "${data.name}" updated successfully!`, 'Board Updated');
-                onClose();
+                // If column order changed, also update column positions
+                if (JSON.stringify(columnData) !== JSON.stringify(board.columns.map(col => ({ id: col.id, position: col.position })))) {
+                    router.post(route('boards.columns.reorder', board.id), {
+                        columns: columnData
+                    }, {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            success(`Board "${data.name}" updated successfully!`, 'Board Updated');
+                            onClose();
+                        },
+                        onError: () => {
+                            error('Board updated but failed to update column order. Please try again.');
+                        }
+                    });
+                } else {
+                    success(`Board "${data.name}" updated successfully!`, 'Board Updated');
+                    onClose();
+                }
             },
             onError: () => {
                 error('Failed to update board. Please try again.');
@@ -103,21 +131,6 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
                             }));
                             
                             setColumns(updatedColumns);
-
-                            // Save to backend using Inertia
-                            const columnData = updatedColumns.map(col => ({
-                                id: col.id,
-                                position: col.position
-                            }));
-
-                            router.post(route('boards.columns.reorder', board.id), {
-                                columns: columnData
-                            }, {
-                                preserveScroll: true,
-                                onError: () => {
-                                    error('Failed to update column order. Please try again.');
-                                }
-                            });
                         }
                     },
                 })
