@@ -253,8 +253,6 @@ class CardShowTest extends TestCase
         );
     }
 
-    // ==================== AUTHORIZATION TESTS ====================
-
     public function test_user_cannot_view_card_they_dont_have_access_to()
     {
         $otherUser = User::factory()->create();

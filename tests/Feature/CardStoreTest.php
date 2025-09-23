@@ -226,8 +226,6 @@ class CardStoreTest extends TestCase
         $response->assertSessionHasErrors(['assigned_user_id']);
     }
 
-    // ==================== AUTHORIZATION TESTS ====================
-
     public function test_user_cannot_create_card_on_board_they_dont_have_access_to()
     {
         $otherUser = User::factory()->create();
