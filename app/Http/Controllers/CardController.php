@@ -8,12 +8,17 @@ use App\Models\BoardColumn;
 use App\Http\Requests\StoreCardRequest;
 use App\Http\Requests\UpdateCardRequest;
 use App\Http\Requests\MoveCardRequest;
+use App\Services\CardService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
 
 class CardController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct(private CardService $cardService) 
+    {
+    }
 
     public function show(Card $card)
     {
@@ -52,18 +57,13 @@ class CardController extends Controller
     {
         $board = Board::findOrFail($request->board_id);
 
-        // Get the highest position in the column
-        $maxPosition = Card::where('board_column_id', $request->board_column_id)
-            ->max('position') ?? 0;
-
-        $card = Card::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'board_id' => $request->board_id,
-            'board_column_id' => $request->board_column_id,
-            'user_id' => $request->assigned_user_id,
-            'position' => $maxPosition + 1,
-        ]);
+        $this->cardService->createCard(
+            $request->board_id,
+            $request->board_column_id,
+            $request->title,
+            $request->description,
+            $request->assigned_user_id
+        );
 
         return redirect()->back()
             ->with('success', 'Card created successfully!');

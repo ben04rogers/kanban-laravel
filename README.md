@@ -87,7 +87,7 @@ The seeder creates several test users. All users have the password: `password`
 
 ## Technical Stack
 
-- **Backend**: Laravel 11 with PHP 8.2+
+- **Backend**: Laravel 12 with PHP 8.2+
 - **Frontend**: React 18 with Inertia.js
 - **Database**: SQLite
 - **Styling**: Tailwind CSS
