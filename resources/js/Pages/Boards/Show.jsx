@@ -188,42 +188,43 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                         )}
                                     </button>
                                     
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
-                                            <button className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                                <span>Actions</span>
-                                                <svg className="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                                </svg>
-                                            </button>
-                                        </Dropdown.Trigger>
+                                    {/* Actions */}
+                                    {board.is_creator ? (
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <button className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                    <span>Actions</span>
+                                                    <svg className="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </Dropdown.Trigger>
 
-                                        <Dropdown.Content contentClasses="py-1 bg-white" width="48">
-                                            <button
-                                                onClick={() => setShowCardModal(true)}
-                                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                            >
-                                                <div className="flex items-center">
-                                                    <svg className="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                                    </svg>
-                                                    Add Card
-                                                </div>
-                                            </button>
-                                            
-                                            <button
-                                                onClick={() => setShowShareModal(true)}
-                                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
-                                            >
-                                                <div className="flex items-center">
-                                                    <svg className="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                                                    </svg>
-                                                    Share Board
-                                                </div>
-                                            </button>
-                                            
-                                            {board.is_creator && (
+                                            <Dropdown.Content contentClasses="py-1 bg-white" width="48">
+                                                <button
+                                                    onClick={() => setShowCardModal(true)}
+                                                    className="block w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                                >
+                                                    <div className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                        </svg>
+                                                        Add Card
+                                                    </div>
+                                                </button>
+
+                                                <button
+                                                    onClick={() => setShowShareModal(true)}
+                                                    className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
+                                                >
+                                                    <div className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                                        </svg>
+                                                        Share Board
+                                                    </div>
+                                                </button>
+
                                                 <button
                                                     onClick={() => setShowEditModal(true)}
                                                     className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none"
@@ -235,23 +236,33 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                                         Edit Board
                                                     </div>
                                                 </button>
-                                            )}
-                                            
-                                            <div className="border-t border-gray-100"></div>
-                                            
-                                            <button
-                                                onClick={() => setShowDeleteModal(true)}
-                                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 focus:bg-red-50 focus:outline-none"
-                                            >
-                                                <div className="flex items-center">
-                                                    <svg className="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                    Delete Board
-                                                </div>
-                                            </button>
-                                        </Dropdown.Content>
-                                    </Dropdown>
+
+                                                <div className="border-t border-gray-100"></div>
+
+                                                <button
+                                                    onClick={() => setShowDeleteModal(true)}
+                                                    className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 focus:bg-red-50 focus:outline-none"
+                                                >
+                                                    <div className="flex items-center">
+                                                        <svg className="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                        Delete Board
+                                                    </div>
+                                                </button>
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    ) : (
+                                        <button
+                                            onClick={() => setShowCardModal(true)}
+                                            className="flex items-center pr-4 pl-2 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                        >
+                                            <svg className="h-4 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                            </svg>
+                                            Add Card
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>

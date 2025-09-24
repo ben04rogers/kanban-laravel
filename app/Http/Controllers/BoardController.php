@@ -7,12 +7,17 @@ use App\Models\BoardColumn;
 use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Http\Requests\ReorderColumnsRequest;
+use App\Services\BoardService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
 
 class BoardController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct(private BoardService $boardService) 
+    {
+    }
 
     public function index()
     {
@@ -59,14 +64,11 @@ class BoardController extends Controller
 
     public function store(StoreBoardRequest $request)
     {
-
-        $board = auth()->user()->boards()->create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
-
-        // Create default columns
-        $this->createDefaultColumns($board);
+        $board = $this->boardService->createBoard(
+            auth()->id(),
+            $request->name,
+            $request->description
+        );
 
         return redirect()->route('boards.show', $board)
             ->with('success', 'Board created successfully!');
@@ -74,11 +76,11 @@ class BoardController extends Controller
 
     public function update(UpdateBoardRequest $request, Board $board)
     {
-
-        $board->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $this->boardService->updateBoard(
+            $board,
+            $request->name,
+            $request->description
+        );
 
         return redirect()->back()
             ->with('success', 'Board updated successfully!');
@@ -88,7 +90,7 @@ class BoardController extends Controller
     {
         $this->authorize('delete', $board);
 
-        $board->delete();
+        $this->boardService->deleteBoard($board);
 
         return redirect()->route('boards.index')
             ->with('success', 'Board deleted successfully!');
@@ -96,32 +98,9 @@ class BoardController extends Controller
 
     public function reorderColumns(ReorderColumnsRequest $request, Board $board)
     {
+        $this->boardService->reorderColumns($board, $request->columns);
 
-        foreach ($request->columns as $columnData) {
-            $board->columns()->where('id', $columnData['id'])->update([
-                'position' => $columnData['position']
-            ]);
-        }
-
-        // Return back to the board page with updated data
         return redirect()->back();
     }
 
-    private function createDefaultColumns(Board $board)
-    {
-        $defaultColumns = [
-            ['name' => 'To Do', 'position' => 0],
-            ['name' => 'In Progress', 'position' => 1],
-            ['name' => 'Testing', 'position' => 2],
-            ['name' => 'Done', 'position' => 3],
-        ];
-
-        foreach ($defaultColumns as $column) {
-            BoardColumn::create([
-                'name' => $column['name'],
-                'position' => $column['position'],
-                'board_id' => $board->id,
-            ]);
-        }
-    }
 }
