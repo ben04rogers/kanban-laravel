@@ -43,4 +43,35 @@ class CardService
 
         return $card->fresh();
     }
+
+    public function moveCard(Card $card, string $newColumnId, int $newPosition): Card
+    {
+        $oldColumnId = $card->board_column_id;
+
+        if ($oldColumnId !== $newColumnId) {
+            $card->update(['board_column_id' => $newColumnId]);
+        }
+
+        // Reorder cards in the new column
+        $this->reorderCardsInColumn($newColumnId, $card->id, $newPosition);
+
+        return $card->fresh();
+    }
+
+    private function reorderCardsInColumn(string $columnId, string $cardId, int $newPosition): void
+    {
+        // Get all cards in the column except the one being moved
+        $cards = Card::where('board_column_id', $columnId)
+            ->where('id', '!=', $cardId)
+            ->orderBy('position')
+            ->get();
+
+        // Insert the moved card at the new position
+        $cards->splice($newPosition, 0, [Card::find($cardId)]);
+
+        // Update positions
+        foreach ($cards as $index => $card) {
+            $card->update(['position' => $index]);
+        }
+    }
 }

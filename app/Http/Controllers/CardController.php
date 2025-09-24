@@ -84,18 +84,11 @@ class CardController extends Controller
 
     public function move(MoveCardRequest $request, Card $card)
     {
-
-        $oldColumnId = $card->board_column_id;
-        $newColumnId = $request->board_column_id;
-        $newPosition = $request->position;
-
-        // If moving to a different column, update the column
-        if ($oldColumnId !== $newColumnId) {
-            $card->update(['board_column_id' => $newColumnId]);
-        }
-
-        // Reorder cards in the new column
-        $this->reorderCardsInColumn($newColumnId, $card->id, $newPosition);
+        $this->cardService->moveCard(
+            $card,
+            $request->board_column_id,
+            $request->position
+        );
 
         return redirect()->back();
     }
@@ -109,22 +102,5 @@ class CardController extends Controller
 
         return redirect()->route('boards.show', $boardId)
             ->with('success', 'Card deleted successfully!');
-    }
-
-    private function reorderCardsInColumn($columnId, $cardId, $newPosition)
-    {
-        // Get all cards in the column except the one being moved
-        $cards = Card::where('board_column_id', $columnId)
-            ->where('id', '!=', $cardId)
-            ->orderBy('position')
-            ->get();
-
-        // Insert the moved card at the new position
-        $cards->splice($newPosition, 0, [Card::find($cardId)]);
-
-        // Update positions
-        foreach ($cards as $index => $card) {
-            $card->update(['position' => $index]);
-        }
     }
 }
