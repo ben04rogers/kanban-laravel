@@ -71,12 +71,12 @@ class CardController extends Controller
 
     public function update(UpdateCardRequest $request, Card $card)
     {
-
-        $card->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'user_id' => $request->assigned_user_id,
-        ]);
+       $this->cardService->updateCard(
+           $card,
+           $request->title,
+           $request->description,
+           $request->assigned_user_id
+       );
 
         return redirect()->back()
             ->with('success', 'Card updated successfully!');

@@ -28,4 +28,19 @@ class CardService
             'position'        => $maxPosition + 1,
         ]);
     }
+
+    public function updateCard(
+        Card $card,
+        string $title,
+        ?string $description = null,
+        ?string $assigned_user_id = null,
+    ): Card {
+        $card->update([
+            'title' => $title,
+            'description' => $description,
+            'user_id' => $assigned_user_id,
+        ]);
+
+        return $card->fresh();
+    }
 }
