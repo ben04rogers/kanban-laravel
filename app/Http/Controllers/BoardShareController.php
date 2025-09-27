@@ -17,7 +17,7 @@ class BoardShareController extends Controller
         $this->authorize('view', $board);
 
         $board->load('shares.user');
-        
+
         return response()->json([
             'shares' => $board->shares
         ]);
@@ -26,7 +26,7 @@ class BoardShareController extends Controller
     public function searchUsers(Request $request)
     {
         $query = $request->get('q', '');
-        
+
         if (strlen($query) < 2) {
             return response()->json(['users' => []]);
         }
@@ -61,7 +61,7 @@ class BoardShareController extends Controller
             return back()->withErrors(['user_id' => 'Board is already shared with this user']);
         }
 
-        $share = BoardShare::create([
+        BoardShare::create([
             'board_id' => $board->id,
             'user_id' => $request->user_id
         ]);
