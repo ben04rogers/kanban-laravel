@@ -80,17 +80,15 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
     };
 
     const handleCardClick = (card) => {
-        setSelectedCard(card);
-        setShowCardDetailModal(true);
-        // Update URL without page reload
-        window.history.pushState({}, '', `/cards/${card.id}`);
+        // Navigate to the card URL to load full card data including comments
+        router.visit(route('cards.show', card.id));
     };
 
     const closeCardDetailModal = () => {
         setShowCardDetailModal(false);
         setSelectedCard(null);
-        // Reset URL to board
-        window.history.pushState({}, '', `/boards/${board.id}`);
+        // Navigate back to board
+        router.visit(route('boards.show', board.id));
     };
 
     // Handle URL parameter for card modal
@@ -116,7 +114,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                 const cardIdFromUrl = currentPath.split('/cards/')[1];
                 if (cardIdFromUrl && cardIdFromUrl !== cardId) {
                     // Navigate to the card
-                    window.location.href = `/cards/${cardIdFromUrl}`;
+                    router.visit(`/cards/${cardIdFromUrl}`);
                 }
             } else if (showCardDetailModal) {
                 // Close modal if we're back on the board

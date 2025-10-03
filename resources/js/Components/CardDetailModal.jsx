@@ -1,10 +1,12 @@
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useToast } from '@/Contexts/ToastContext';
 import UserDropdown from '@/Components/UserDropdown';
+import CommentList from '@/Components/CommentList';
+import CommentForm from '@/Components/CommentForm';
 
 export default function CardDetailModal({ 
     isOpen, 
@@ -15,6 +17,8 @@ export default function CardDetailModal({
     const [isEditing, setIsEditing] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const { success, error } = useToast();
+    const { auth } = usePage().props;
+    const currentUser = auth.user;
     
     const { data, setData, put, processing, errors, reset } = useForm({
         title: card?.title || '',
@@ -213,6 +217,21 @@ export default function CardDetailModal({
                             )}
                             {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
                         </div>
+
+                        {/* Comments Section */}
+                        {!isEditing && (
+                            <div>
+                                <h3 className="text-lg font-medium text-gray-900 mb-4">Comments</h3>
+                                <CommentList 
+                                    comments={card.comments || []} 
+                                    currentUser={currentUser}
+                                />
+                                <CommentForm 
+                                    cardId={card.id} 
+                                    currentUser={currentUser}
+                                />
+                            </div>
+                        )}
 
                         {/* Actions */}
                         <div className="flex justify-between items-center pt-4 border-t border-gray-200">

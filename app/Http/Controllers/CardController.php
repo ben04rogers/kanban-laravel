@@ -24,7 +24,7 @@ class CardController extends Controller
     {
         $this->authorize('view', $card);
 
-        $card->load(['board', 'column', 'user']);
+        $card->load(['board', 'column', 'user', 'comments.user']);
         
         // Load the board with all necessary relationships
         $board = $card->board;
@@ -34,6 +34,9 @@ class CardController extends Controller
             },
             'columns.cards.user' => function($query) {
                 $query->orderBy('position');
+            },
+            'columns.cards.comments.user' => function($query) {
+                $query->orderBy('created_at', 'desc');
             },
             'user',
             'sharedWith'
