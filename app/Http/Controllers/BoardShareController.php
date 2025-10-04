@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Board;
 use App\Models\BoardShare;
-use App\Models\User;
+use App\Services\BoardShareService;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -12,29 +12,25 @@ class BoardShareController extends Controller
 {
     use AuthorizesRequests;
 
+    public function __construct(
+        private BoardShareService $boardShareService
+    ) {}
+
     public function index(Board $board)
     {
         $this->authorize('view', $board);
 
-        $board->load('shares.user');
+        $shares = $this->boardShareService->getBoardShares($board);
 
         return response()->json([
-            'shares' => $board->shares
+            'shares' => $shares
         ]);
     }
 
     public function searchUsers(Request $request)
     {
         $query = $request->get('q', '');
-
-        if (strlen($query) < 2) {
-            return response()->json(['users' => []]);
-        }
-
-        $users = User::where('name', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
-            ->limit(10)
-            ->get(['id', 'name', 'email']);
+        $users = $this->boardShareService->searchUsers($query);
 
         return response()->json(['users' => $users]);
     }
@@ -47,33 +43,19 @@ class BoardShareController extends Controller
             'user_id' => 'required|exists:users,id'
         ]);
 
-        // Check if user is not the board owner
-        if ($board->user_id == $request->user_id) {
-            return back()->withErrors(['user_id' => 'Cannot share board with the owner']);
+        try {
+            $this->boardShareService->shareBoard($board, $request->user_id);
+            return back()->with('success', 'Board shared successfully');
+        } catch (\InvalidArgumentException $e) {
+            return back()->withErrors(['user_id' => $e->getMessage()]);
         }
-
-        // Check if already shared
-        $existingShare = BoardShare::where('board_id', $board->id)
-            ->where('user_id', $request->user_id)
-            ->first();
-
-        if ($existingShare) {
-            return back()->withErrors(['user_id' => 'Board is already shared with this user']);
-        }
-
-        BoardShare::create([
-            'board_id' => $board->id,
-            'user_id' => $request->user_id
-        ]);
-
-        return back()->with('success', 'Board shared successfully');
     }
 
     public function destroy(Board $board, BoardShare $share)
     {
         $this->authorize('update', $board);
 
-        $share->delete();
+        $this->boardShareService->removeShare($share);
 
         return back()->with('success', 'Share removed successfully');
     }
