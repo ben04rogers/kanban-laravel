@@ -1,5 +1,6 @@
 import { useForm, router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
+import StatusDropdown from '@/Components/StatusDropdown';
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from '@/Contexts/ToastContext';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
@@ -13,6 +14,7 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
     const { data, setData, put, processing, errors, reset } = useForm({
         name: board.name || '',
         description: board.description || '',
+        status: board.status || 'active',
         columns: board.columns || [],
     });
 
@@ -23,6 +25,7 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
             setData({
                 name: board.name || '',
                 description: board.description || '',
+                status: board.status || 'active',
                 columns: board.columns || [],
             });
         }
@@ -221,7 +224,7 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
                             {errors.name && <div className="text-red-500 text-sm mt-1">{errors.name}</div>}
                         </div>
 
-                        <div className="mb-6">
+                        <div className="mb-4">
                             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
                                 Description
                             </label>
@@ -234,6 +237,18 @@ export default function EditBoardModal({ isOpen, onClose, board }) {
                                 placeholder="Enter board description (optional)"
                             />
                             {errors.description && <div className="text-red-500 text-sm mt-1">{errors.description}</div>}
+                        </div>
+
+                        <div className="mb-6">
+                            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+                                Status
+                            </label>
+                            <StatusDropdown
+                                value={data.status}
+                                onChange={(value) => setData('status', value)}
+                                placeholder="Select board status..."
+                            />
+                            {errors.status && <div className="text-red-500 text-sm mt-1">{errors.status}</div>}
                         </div>
 
                         {/* Column Reordering Section */}

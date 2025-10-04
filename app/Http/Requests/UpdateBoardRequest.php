@@ -26,6 +26,7 @@ class UpdateBoardRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'status' => 'required|in:active,completed,archived',
         ];
     }
 
@@ -40,6 +41,8 @@ class UpdateBoardRequest extends FormRequest
             'name.required' => 'The board name is required.',
             'name.max' => 'The board name may not be greater than 255 characters.',
             'description.max' => 'The board description may not be greater than 1000 characters.',
+            'status.required' => 'The board status is required.',
+            'status.in' => 'The board status must be active, completed, or archived.',
         ];
     }
 }

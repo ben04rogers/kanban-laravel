@@ -20,12 +20,18 @@ class BoardService
         return $board;
     }
 
-    public function updateBoard(Board $board, string $name, ?string $description = null): Board
+    public function updateBoard(Board $board, string $name, ?string $description = null, ?string $status = null): Board
     {
-        $board->update([
+        $updateData = [
             'name' => $name,
             'description' => $description,
-        ]);
+        ];
+
+        if ($status !== null) {
+            $updateData['status'] = $status;
+        }
+
+        $board->update($updateData);
 
         return $board->fresh();
     }

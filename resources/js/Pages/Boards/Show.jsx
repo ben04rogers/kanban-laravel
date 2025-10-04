@@ -152,7 +152,17 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                         <div className="p-6">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <h1 className="text-2xl font-bold text-gray-900">{board.name}</h1>
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <h1 className="text-2xl font-bold text-gray-900">{board.name}</h1>
+                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                            board.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                                            board.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                            'bg-gray-100 text-gray-800'
+                                        }`}>
+                                            {board.status === 'active' ? 'Active' :
+                                             board.status === 'completed' ? 'Completed' : 'Archived'}
+                                        </span>
+                                    </div>
                                     {board.description && (
                                         <p className="text-gray-600 mt-2">{board.description}</p>
                                     )}

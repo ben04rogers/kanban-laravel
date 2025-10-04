@@ -22,13 +22,14 @@ class BoardController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $status = request()->get('status', 'active'); // Default to active boards
         $withColumns = ['columns' => fn($query) => $query->orderBy('position')];
         
         $boards = collect()
-            ->merge($user->boards()->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', true)))
-            ->merge($user->sharedBoards()->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', false)));
+            ->merge($user->boards()->where('status', $status)->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', true)))
+            ->merge($user->sharedBoards()->where('status', $status)->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', false)));
 
-        return Inertia::render('Boards/Index', compact('boards'));
+        return Inertia::render('Boards/Index', compact('boards', 'status'));
     }
 
     public function show(Board $board)
@@ -79,7 +80,8 @@ class BoardController extends Controller
         $this->boardService->updateBoard(
             $board,
             $request->name,
-            $request->description
+            $request->description,
+            $request->status
         );
 
         return redirect()->back()
@@ -101,6 +103,27 @@ class BoardController extends Controller
         $this->boardService->reorderColumns($board, $request->columns);
 
         return redirect()->back();
+    }
+
+    public function updateStatus(Board $board)
+    {
+        $this->authorize('update', $board);
+        
+        $request = request();
+        $status = $request->validate([
+            'status' => 'required|in:active,completed,archived'
+        ])['status'];
+
+        $board->update(['status' => $status]);
+
+        $statusMessages = [
+            'active' => 'Board marked as active',
+            'completed' => 'Board marked as completed',
+            'archived' => 'Board archived'
+        ];
+
+        return redirect()->back()
+            ->with('success', $statusMessages[$status] . ' successfully!');
     }
 
 }

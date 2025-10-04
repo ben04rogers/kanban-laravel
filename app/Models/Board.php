@@ -16,7 +16,12 @@ class Board extends Model
     protected $fillable = [
         'name',
         'description',
+        'status',
         'user_id',
+    ];
+
+    protected $casts = [
+        'status' => 'string',
     ];
 
     public function user(): BelongsTo
@@ -42,5 +47,52 @@ class Board extends Model
     public function sharedWith(): HasManyThrough
     {
         return $this->hasManyThrough(User::class, BoardShare::class, 'board_id', 'id', 'id', 'user_id');
+    }
+
+    // Status helper methods
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === 'completed';
+    }
+
+    public function isArchived(): bool
+    {
+        return $this->status === 'archived';
+    }
+
+    public function markAsCompleted(): void
+    {
+        $this->update(['status' => 'completed']);
+    }
+
+    public function markAsArchived(): void
+    {
+        $this->update(['status' => 'archived']);
+    }
+
+    public function markAsActive(): void
+    {
+        $this->update(['status' => 'active']);
+    }
+
+    // Scope methods for filtering
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeArchived($query)
+    {
+        return $query->where('status', 'archived');
     }
 }

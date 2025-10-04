@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     // Board routes
     Route::resource('boards', BoardController::class);
     Route::post('/boards/{board}/columns/reorder', [BoardController::class, 'reorderColumns'])->name('boards.columns.reorder');
+    Route::patch('/boards/{board}/status', [BoardController::class, 'updateStatus'])->name('boards.status.update');
 
     // Card routes
     Route::resource('cards', CardController::class)->except(['index']);

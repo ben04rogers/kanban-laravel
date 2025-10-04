@@ -8,7 +8,7 @@ import BoardModal from '@/Components/BoardModal';
 import { useState } from 'react';
 import { useToast } from '@/Contexts/ToastContext';
 
-export default function Index({ boards }) {
+export default function Index({ boards, status = 'active' }) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [boardToDelete, setBoardToDelete] = useState(null);
     const { success, error } = useToast();
@@ -18,6 +18,26 @@ export default function Index({ boards }) {
             label: 'Boards'
         }
     ];
+
+    const handleStatusChange = (newStatus) => {
+        // Use the current route (either home or boards.index) with status parameter
+        const currentUrl = window.location.pathname;
+        const baseUrl = currentUrl === '/' ? '/' : route('boards.index');
+        
+        router.get(baseUrl, { status: newStatus }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
+    const getStatusLabel = (status) => {
+        const labels = {
+            'active': 'Active Boards',
+            'completed': 'Completed Boards', 
+            'archived': 'Archived Boards'
+        };
+        return labels[status] || 'Boards';
+    };
 
     const deleteBoard = (boardId) => {
         const board = boards.find(b => b.id === boardId);
@@ -46,17 +66,61 @@ export default function Index({ boards }) {
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-2xl font-bold">My Boards</h2>
-                                <PrimaryButton onClick={() => setShowCreateModal(true)}>
-                                    Create Board
-                                </PrimaryButton>
+                                <div>
+                                    <h2 className="text-2xl font-bold">{getStatusLabel(status)}</h2>
+                                    <div className="flex space-x-2 mt-2">
+                                        <button
+                                            onClick={() => handleStatusChange('active')}
+                                            className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                                                status === 'active' 
+                                                    ? 'bg-blue-100 text-blue-800 font-medium' 
+                                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            Active
+                                        </button>
+                                        <button
+                                            onClick={() => handleStatusChange('completed')}
+                                            className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                                                status === 'completed' 
+                                                    ? 'bg-green-100 text-green-800 font-medium' 
+                                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            Completed
+                                        </button>
+                                        <button
+                                            onClick={() => handleStatusChange('archived')}
+                                            className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                                                status === 'archived' 
+                                                    ? 'bg-gray-100 text-gray-800 font-medium' 
+                                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+                                            }`}
+                                        >
+                                            Archived
+                                        </button>
+                                    </div>
+                                </div>
+                                {status === 'active' && (
+                                    <PrimaryButton onClick={() => setShowCreateModal(true)}>
+                                        Create Board
+                                    </PrimaryButton>
+                                )}
                             </div>
 
                             {/* Boards Grid */}
                             {boards.length === 0 ? (
                                 <div className="text-center py-12">
-                                    <div className="text-gray-500 text-lg mb-4">No boards yet</div>
-                                    <p className="text-gray-400">Create your first board to get started!</p>
+                                    <div className="text-gray-500 text-lg mb-4">
+                                        {status === 'active' && 'No active boards yet'}
+                                        {status === 'completed' && 'No completed boards yet'}
+                                        {status === 'archived' && 'No archived boards yet'}
+                                    </div>
+                                    <p className="text-gray-400">
+                                        {status === 'active' && 'Create your first board to get started!'}
+                                        {status === 'completed' && 'Complete some boards to see them here.'}
+                                        {status === 'archived' && 'Archive some boards to see them here.'}
+                                    </p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -84,15 +148,25 @@ export default function Index({ boards }) {
                                                                 day: 'numeric'
                                                             })}
                                                         </div>  
-                                                        {board.is_owner ? (
-                                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-1">
-                                                                Owner
+                                                        <div className="flex flex-wrap gap-2 mt-2">
+                                                            {board.is_owner ? (
+                                                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                    Owner
+                                                                </span>
+                                                            ) : (
+                                                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                                    Shared with me
+                                                                </span>
+                                                            )}
+                                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                                                board.status === 'active' ? 'bg-blue-100 text-blue-800' :
+                                                                board.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                                'bg-gray-100 text-gray-800'
+                                                            }`}>
+                                                                {board.status === 'active' ? 'Active' :
+                                                                 board.status === 'completed' ? 'Completed' : 'Archived'}
                                                             </span>
-                                                        ) : (
-                                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
-                                                                Shared with me
-                                                            </span>
-                                                        )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
