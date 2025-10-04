@@ -7,12 +7,12 @@ export default function Breadcrumb({ items = [] }) {
 
     return (
         <nav className="flex" aria-label="Breadcrumb">
-            <ol className="inline-flex items-center space-x-1 md:space-x-3">
+            <ol className="inline-flex items-center space-x-1">
                 {items.map((item, index) => (
                     <li key={index} className="inline-flex items-center">
                         {index > 0 && (
                             <svg 
-                                className="w-6 h-6 text-gray-400 mx-1" 
+                                className="w-4 h-4 text-gray-400 mx-1" 
                                 fill="currentColor" 
                                 viewBox="0 0 20 20"
                             >
