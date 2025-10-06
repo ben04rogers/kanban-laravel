@@ -7,6 +7,7 @@ use App\Models\Board;
 use App\Models\BoardColumn;
 use App\Models\Card;
 use App\Models\BoardShare;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 
 class TestSeeder extends Seeder
@@ -104,6 +105,9 @@ class TestSeeder extends Seeder
 
         // Create realistic cards for each board
         $this->createCards($createdBoards, $createdUsers);
+
+        // Add comments to cards
+        $this->createComments($createdUsers);
     }
 
     private function shareBoardWithTeam($board, $users)
@@ -442,6 +446,128 @@ class TestSeeder extends Seeder
                         'position' => $cardIndex,
                     ]);
                 }
+            }
+        }
+    }
+
+    private function createComments($users)
+    {
+        // Get all cards to add comments to
+        $cards = Card::all();
+        
+        // Define realistic comment templates for different scenarios
+        $commentTemplates = [
+            // Technical discussions
+            [
+                'content' => 'I think we should consider using Redis for caching the real-time updates. It would be much more efficient than polling.',
+                'context' => 'technical'
+            ],
+            [
+                'content' => 'The API response time is looking good, but we might want to add some pagination for large datasets.',
+                'context' => 'technical'
+            ],
+            [
+                'content' => 'I\'ve tested this on Chrome, Firefox, and Safari. Everything looks good across all browsers.',
+                'context' => 'testing'
+            ],
+            [
+                'content' => 'Found a small bug in the mobile version. The drag and drop doesn\'t work properly on iOS Safari.',
+                'context' => 'bug'
+            ],
+            [
+                'content' => 'This looks great! The UI is much cleaner now. Should we also update the mobile version?',
+                'context' => 'feedback'
+            ],
+            [
+                'content' => 'I\'ve updated the documentation in the wiki. The API endpoints are now fully documented.',
+                'context' => 'documentation'
+            ],
+            [
+                'content' => 'Can we schedule a quick call to discuss the implementation approach? I have some questions about the architecture.',
+                'context' => 'meeting'
+            ],
+            [
+                'content' => 'I\'ve created a branch for this feature. The code is ready for review.',
+                'context' => 'development'
+            ],
+            [
+                'content' => 'The performance tests are passing. We\'re meeting all our benchmarks.',
+                'context' => 'testing'
+            ],
+            [
+                'content' => 'I\'ve deployed this to staging. You can test it at staging.example.com',
+                'context' => 'deployment'
+            ],
+            [
+                'content' => 'Great work on this! The implementation is exactly what we discussed.',
+                'context' => 'praise'
+            ],
+            [
+                'content' => 'I noticed we might need to handle edge cases for users with slow connections.',
+                'context' => 'consideration'
+            ],
+            [
+                'content' => 'The design looks perfect! This matches our brand guidelines exactly.',
+                'context' => 'design'
+            ],
+            [
+                'content' => 'I\'ve added some unit tests for this functionality. Coverage is now at 95%.',
+                'context' => 'testing'
+            ],
+            [
+                'content' => 'Can we add some error handling for when the API is down?',
+                'context' => 'improvement'
+            ],
+            [
+                'content' => 'I\'ve updated the user story to include the new requirements from the client.',
+                'context' => 'requirements'
+            ],
+            [
+                'content' => 'The accessibility audit passed! We\'re now WCAG 2.1 AA compliant.',
+                'context' => 'accessibility'
+            ],
+            [
+                'content' => 'I\'ve optimized the database queries. The page load time improved by 40%.',
+                'context' => 'optimization'
+            ],
+            [
+                'content' => 'The security scan came back clean. No vulnerabilities found.',
+                'context' => 'security'
+            ],
+            [
+                'content' => 'I\'ve created a demo video showing the new features. Check it out!',
+                'context' => 'demo'
+            ],
+        ];
+
+        // Add comments to cards
+        foreach ($cards as $card) {
+            // Randomly decide how many comments to add (1-4 comments per card)
+            $commentCount = rand(1, 4);
+            
+            for ($i = 0; $i < $commentCount; $i++) {
+                // Randomly select a user (excluding the card assignee sometimes for variety)
+                $commentUser = $users[array_rand($users)];
+                
+                // Sometimes use a different user than the assignee
+                if (rand(1, 3) === 1 && $card->user_id !== $commentUser->id) {
+                    // Use a different user
+                } else {
+                    // Use the card assignee - find the user by ID in the array
+                    $assigneeUser = collect($users)->where('id', $card->user_id)->first();
+                    $commentUser = $assigneeUser ?? $users[array_rand($users)];
+                }
+                
+                // Select a random comment template
+                $template = $commentTemplates[array_rand($commentTemplates)];
+                
+                // Create the comment
+                Comment::create([
+                    'content' => $template['content'],
+                    'card_id' => $card->id,
+                    'user_id' => $commentUser->id,
+                    'created_at' => now()->subDays(rand(0, 30))->subHours(rand(0, 23))->subMinutes(rand(0, 59)),
+                ]);
             }
         }
     }

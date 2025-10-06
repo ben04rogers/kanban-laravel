@@ -116,7 +116,7 @@ The seeder creates several test users. All users have the password: `password`
     </td>
     <td align="center" valign="top" width="50%">
       <img src="docs/screenshots/card-detail.png" alt="Card Detail" width="100%" />
-      <div><sub><b>Card Detail</b> — Detailed view with editing capabilities</sub></div>
+      <div><sub><b>Card Detail</b> — Detailed view where users can edit cards and add comments</sub></div>
     </td>
   </tr>
   <tr>
