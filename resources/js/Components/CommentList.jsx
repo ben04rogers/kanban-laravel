@@ -1,20 +1,30 @@
 import { router } from '@inertiajs/react';
 import { useToast } from '@/Contexts/ToastContext';
+import { useState } from 'react';
 
 export default function CommentList({ comments = [], currentUser }) {
     const { success, error } = useToast();
+    const [deletingCommentId, setDeletingCommentId] = useState(null);
 
-    const handleDeleteComment = (commentId) => {
-        if (confirm('Are you sure you want to delete this comment?')) {
-            router.delete(route('comments.destroy', commentId), {
-                onSuccess: () => {
-                    success('Comment deleted successfully!');
-                },
-                onError: () => {
-                    error('Failed to delete comment. Please try again.');
-                },
-            });
-        }
+    const handleDeleteClick = (commentId) => {
+        setDeletingCommentId(commentId);
+    };
+
+    const handleCancelDelete = () => {
+        setDeletingCommentId(null);
+    };
+
+    const handleConfirmDelete = (commentId) => {
+        router.delete(route('comments.destroy', commentId), {
+            onSuccess: () => {
+                success('Comment deleted successfully!');
+                setDeletingCommentId(null);
+            },
+            onError: () => {
+                error('Failed to delete comment. Please try again.');
+                setDeletingCommentId(null);
+            },
+        });
     };
 
     const formatDate = (dateString) => {
@@ -69,15 +79,35 @@ export default function CommentList({ comments = [], currentUser }) {
                                     </span>
                                 </div>
                                 {(currentUser.id === comment.user_id || currentUser.id === comment.card?.board?.user_id) && (
-                                    <button
-                                        onClick={() => handleDeleteComment(comment.id)}
-                                        className="text-gray-400 hover:text-red-500 transition-colors"
-                                        title="Delete comment"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        {deletingCommentId === comment.id ? (
+                                            <>
+                                                <span className="text-xs text-gray-600 font-medium">Delete this?</span>
+                                                <button
+                                                    onClick={() => handleConfirmDelete(comment.id)}
+                                                    className="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 transition-colors"
+                                                >
+                                                    Delete
+                                                </button>
+                                                <button
+                                                    onClick={handleCancelDelete}
+                                                    className="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <button
+                                                onClick={() => handleDeleteClick(comment.id)}
+                                                className="text-gray-400 hover:text-red-500 transition-colors"
+                                                title="Delete comment"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                             <div className="mt-2">
