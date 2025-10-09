@@ -82,7 +82,7 @@ export default function CommentList({ comments = [], currentUser }) {
                                     <div className="flex items-center gap-2">
                                         {deletingCommentId === comment.id ? (
                                             <>
-                                                <span className="text-xs text-gray-600 font-medium">Delete this?</span>
+                                                <span className="text-xs text-gray-600 font-medium">Delete comment?</span>
                                                 <button
                                                     onClick={() => handleConfirmDelete(comment.id)}
                                                     className="px-2 py-1 text-xs font-medium text-white bg-red-600 rounded hover:bg-red-700 transition-colors"

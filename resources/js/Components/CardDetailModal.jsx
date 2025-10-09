@@ -16,6 +16,7 @@ export default function CardDetailModal({
 }) {
     const [isEditing, setIsEditing] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     const { success, error } = useToast();
     const { auth } = usePage().props;
     const currentUser = auth.user;
@@ -36,10 +37,12 @@ export default function CardDetailModal({
             });
             setSelectedUser(card.user || null);
             setIsEditing(false);
+            setIsConfirmingDelete(false);
         } else if (!isOpen) {
             reset();
             setSelectedUser(null);
             setIsEditing(false);
+            setIsConfirmingDelete(false);
         }
     }, [isOpen, card, boardUsers]);
 
@@ -78,21 +81,30 @@ export default function CardDetailModal({
 
     const handleClose = () => {
         setIsEditing(false);
+        setIsConfirmingDelete(false);
         onClose();
     };
 
-    const handleDelete = () => {
-        if (confirm('Are you sure you want to delete this card? This action cannot be undone.')) {
-            router.delete(route('cards.destroy', card.id), {
-                onSuccess: () => {
-                    success(`Card "${card.title}" deleted successfully!`, 'Card Deleted');
-                    onClose();
-                },
-                onError: () => {
-                    error('Failed to delete card. Please try again.');
-                },
-            });
-        }
+    const handleDeleteClick = () => {
+        setIsConfirmingDelete(true);
+    };
+
+    const handleCancelDelete = () => {
+        setIsConfirmingDelete(false);
+    };
+
+    const handleConfirmDelete = () => {
+        router.delete(route('cards.destroy', card.id), {
+            onSuccess: () => {
+                success(`Card "${card.title}" deleted successfully!`, 'Card Deleted');
+                setIsConfirmingDelete(false);
+                onClose();
+            },
+            onError: () => {
+                error('Failed to delete card. Please try again.');
+                setIsConfirmingDelete(false);
+            },
+        });
     };
 
     if (!isOpen || !card) return null;
@@ -261,9 +273,31 @@ export default function CardDetailModal({
                                 )}
                             </div>
                             
-                            <DangerButton onClick={handleDelete}>
-                                Delete Card
-                            </DangerButton>
+                            <div className="flex items-center gap-3">
+                                {isConfirmingDelete ? (
+                                    <>
+                                        <span className="text-sm text-gray-700 font-medium">
+                                            Delete card?
+                                        </span>
+                                        <button
+                                            onClick={handleConfirmDelete}
+                                            className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors"
+                                        >
+                                            Delete
+                                        </button>
+                                        <button
+                                            onClick={handleCancelDelete}
+                                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </>
+                                ) : (
+                                    <DangerButton onClick={handleDeleteClick}>
+                                        Delete
+                                    </DangerButton>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
