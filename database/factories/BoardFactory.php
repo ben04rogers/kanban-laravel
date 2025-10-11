@@ -24,6 +24,26 @@ class BoardFactory extends Factory
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence(),
             'user_id' => User::factory(),
+            'status' => 'active',
         ];
+    }
+
+    /**
+     * Create a board with default columns.
+     */
+    public function withColumns(): static
+    {
+        return $this->afterCreating(function (Board $board) {
+            $defaultColumns = [
+                ['name' => 'To Do', 'position' => 0],
+                ['name' => 'In Progress', 'position' => 1],
+                ['name' => 'Testing', 'position' => 2],
+                ['name' => 'Done', 'position' => 3],
+            ];
+
+            foreach ($defaultColumns as $column) {
+                $board->columns()->create($column);
+            }
+        });
     }
 }

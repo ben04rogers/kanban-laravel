@@ -81,7 +81,8 @@ class BoardController extends Controller
             $board,
             $request->name,
             $request->description,
-            $request->status
+            $request->status,
+            $request->input('columns')
         );
 
         return redirect()->back()
