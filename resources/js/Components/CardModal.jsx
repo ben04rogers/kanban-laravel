@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { useToast } from '@/Contexts/ToastContext';
 import UserDropdown from '@/Components/UserDropdown';
+import ColumnDropdown from '@/Components/ColumnDropdown';
 
 export default function CardModal({ 
     isOpen, 
@@ -89,19 +90,13 @@ export default function CardModal({
                                 <label htmlFor="board_column_id" className="block text-sm font-medium text-gray-700 mb-2">
                                     Column *
                                 </label>
-                                <select
-                                    id="board_column_id"
-                                    value={data.board_column_id}
-                                    onChange={(e) => setData('board_column_id', e.target.value)}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                    <option value="">Select a column</option>
-                                    {columns.map((column) => (
-                                        <option key={column.id} value={column.id}>
-                                            {column.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <ColumnDropdown
+                                    columns={columns}
+                                    selectedColumnId={data.board_column_id}
+                                    onSelect={(columnId) => setData('board_column_id', columnId)}
+                                    placeholder="Select a column"
+                                    className="w-full"
+                                />
                                 {errors.board_column_id && <div className="text-red-500 text-sm mt-1">{errors.board_column_id}</div>}
                             </div>
                         )}
