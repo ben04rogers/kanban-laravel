@@ -277,9 +277,9 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                     </div>
 
                     {/* Kanban Board */}
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className={`p-6 ${isExpanded ? 'px-4' : ''}`}>
-                            <div className={`flex gap-6 overflow-x-auto pb-4 ${isExpanded ? 'min-w-max' : ''}`}>
+                    <div className={`bg-white shadow-sm sm:rounded-lg overflow-x-auto ${isExpanded ? 'px-4' : 'px-6'}`}>
+                        <div className="py-6">
+                            <div className="flex gap-6 min-w-max" style={{ paddingRight: isExpanded ? '1rem' : '1.5rem' }}>
                                 {board.columns.map((column) => (
                                     <DroppableColumn
                                         key={column.id}
