@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Board;
 use App\Models\BoardShare;
 use App\Services\BoardShareService;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 
 class BoardShareController extends Controller
 {
@@ -23,7 +23,7 @@ class BoardShareController extends Controller
         $shares = $this->boardShareService->getBoardShares($board);
 
         return response()->json([
-            'shares' => $shares
+            'shares' => $shares,
         ]);
     }
 
@@ -40,11 +40,12 @@ class BoardShareController extends Controller
         $this->authorize('update', $board);
 
         $request->validate([
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
         ]);
 
         try {
             $this->boardShareService->shareBoard($board, $request->user_id);
+
             return back()->with('success', 'Board shared successfully');
         } catch (\InvalidArgumentException $e) {
             return back()->withErrors(['user_id' => $e->getMessage()]);

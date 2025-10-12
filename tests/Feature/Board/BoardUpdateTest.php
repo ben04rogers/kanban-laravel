@@ -22,7 +22,7 @@ class BoardUpdateTest extends TestCase
             ->put("/boards/{$board->id}", [
                 'name' => 'Updated Board Name',
                 'description' => 'Updated description',
-                'status' => 'completed'
+                'status' => 'completed',
             ]);
 
         $response->assertRedirect();
@@ -41,17 +41,17 @@ class BoardUpdateTest extends TestCase
         // Get existing columns
         $existingColumns = $board->columns()->orderBy('position')->get();
 
-        $columnsData = $existingColumns->map(fn($col) => [
+        $columnsData = $existingColumns->map(fn ($col) => [
             'id' => $col->id,
             'name' => $col->name,
-            'position' => $col->position
+            'position' => $col->position,
         ])->toArray();
 
         // Add new column
         $columnsData[] = [
             'id' => null,
             'name' => 'New Column',
-            'position' => count($columnsData)
+            'position' => count($columnsData),
         ];
 
         $response = $this->actingAs($user)
@@ -59,7 +59,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertRedirect();
@@ -80,11 +80,11 @@ class BoardUpdateTest extends TestCase
         $columnToRename = $board->columns()->first();
         $originalId = $columnToRename->id;
 
-        $columnsData = $board->columns()->orderBy('position')->get()->map(function($col) use ($originalId) {
+        $columnsData = $board->columns()->orderBy('position')->get()->map(function ($col) use ($originalId) {
             return [
                 'id' => $col->id,
                 'name' => $col->id === $originalId ? 'Renamed Column' : $col->name,
-                'position' => $col->position
+                'position' => $col->position,
             ];
         })->toArray();
 
@@ -93,7 +93,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertRedirect();
@@ -115,10 +115,10 @@ class BoardUpdateTest extends TestCase
             ->where('id', '!=', $columnId)
             ->orderBy('position')
             ->get()
-            ->map(fn($col, $idx) => [
+            ->map(fn ($col, $idx) => [
                 'id' => $col->id,
                 'name' => $col->name,
-                'position' => $idx
+                'position' => $idx,
             ])
             ->toArray();
 
@@ -127,7 +127,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertRedirect();
@@ -149,7 +149,7 @@ class BoardUpdateTest extends TestCase
             'board_id' => $board->id,
             'board_column_id' => $columnWithCards->id,
             'title' => 'Test Card',
-            'position' => 0
+            'position' => 0,
         ]);
 
         // Try to delete column with cards
@@ -157,10 +157,10 @@ class BoardUpdateTest extends TestCase
             ->where('id', '!=', $columnWithCards->id)
             ->orderBy('position')
             ->get()
-            ->map(fn($col, $idx) => [
+            ->map(fn ($col, $idx) => [
                 'id' => $col->id,
                 'name' => $col->name,
-                'position' => $idx
+                'position' => $idx,
             ])
             ->toArray();
 
@@ -169,12 +169,12 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertSessionHasErrors(['columns']);
         $response->assertSessionHasErrorsIn('default', [
-            'columns' => "Cannot delete column '{$columnWithCards->name}' because it contains 1 card(s). Please move or delete the cards first."
+            'columns' => "Cannot delete column '{$columnWithCards->name}' because it contains 1 card(s). Please move or delete the cards first.",
         ]);
 
         // Column should still exist
@@ -189,10 +189,10 @@ class BoardUpdateTest extends TestCase
         $columns = $board->columns()->orderBy('position')->get();
 
         // Reverse the order
-        $columnsData = $columns->reverse()->values()->map(fn($col, $idx) => [
+        $columnsData = $columns->reverse()->values()->map(fn ($col, $idx) => [
             'id' => $col->id,
             'name' => $col->name,
-            'position' => $idx
+            'position' => $idx,
         ])->toArray();
 
         $response = $this->actingAs($user)
@@ -200,7 +200,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertRedirect();
@@ -227,27 +227,27 @@ class BoardUpdateTest extends TestCase
             [
                 'id' => $columns[0]->id,
                 'name' => $columns[0]->name,
-                'position' => 0
+                'position' => 0,
             ],
             // Rename second column
             [
                 'id' => $columns[1]->id,
                 'name' => 'Renamed Column',
-                'position' => 1
+                'position' => 1,
             ],
             // Delete third column (omit from array)
             // Keep fourth column
             [
                 'id' => $columns[3]->id,
                 'name' => $columns[3]->name,
-                'position' => 2
+                'position' => 2,
             ],
             // Add new column
             [
                 'id' => null,
                 'name' => 'Brand New Column',
-                'position' => 3
-            ]
+                'position' => 3,
+            ],
         ];
 
         $response = $this->actingAs($user)
@@ -255,7 +255,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertRedirect();
@@ -284,16 +284,16 @@ class BoardUpdateTest extends TestCase
         // Share board with user
         $board->shares()->create(['user_id' => $sharedUser->id]);
 
-        $columnsData = $board->columns()->orderBy('position')->get()->map(fn($col) => [
+        $columnsData = $board->columns()->orderBy('position')->get()->map(fn ($col) => [
             'id' => $col->id,
             'name' => $col->name,
-            'position' => $col->position
+            'position' => $col->position,
         ])->toArray();
 
         $columnsData[] = [
             'id' => null,
             'name' => 'New Column',
-            'position' => count($columnsData)
+            'position' => count($columnsData),
         ];
 
         $response = $this->actingAs($sharedUser)
@@ -301,7 +301,7 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         // Shared users cannot update boards (only owners can)
@@ -313,10 +313,10 @@ class BoardUpdateTest extends TestCase
         $user = User::factory()->create();
         $board = Board::factory()->withColumns()->create(['user_id' => $user->id]);
 
-        $columnsData = $board->columns()->orderBy('position')->get()->map(fn($col) => [
+        $columnsData = $board->columns()->orderBy('position')->get()->map(fn ($col) => [
             'id' => $col->id,
             'name' => 'Duplicate Name', // All columns have same name
-            'position' => $col->position
+            'position' => $col->position,
         ])->toArray();
 
         $response = $this->actingAs($user)
@@ -324,12 +324,12 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertSessionHasErrors(['columns']);
         $response->assertSessionHasErrorsIn('default', [
-            'columns' => 'Column names must be unique.'
+            'columns' => 'Column names must be unique.',
         ]);
     }
 
@@ -343,12 +343,12 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => [] // Empty columns array
+                'columns' => [], // Empty columns array
             ]);
 
         $response->assertSessionHasErrors(['columns']);
         $response->assertSessionHasErrorsIn('default', [
-            'columns' => 'At least one column is required.'
+            'columns' => 'At least one column is required.',
         ]);
     }
 
@@ -361,8 +361,8 @@ class BoardUpdateTest extends TestCase
             [
                 'id' => null,
                 'name' => '', // Empty name
-                'position' => 0
-            ]
+                'position' => 0,
+            ],
         ];
 
         $response = $this->actingAs($user)
@@ -370,12 +370,12 @@ class BoardUpdateTest extends TestCase
                 'name' => $board->name,
                 'description' => $board->description,
                 'status' => $board->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertSessionHasErrors(['columns.0.name']);
         $response->assertSessionHasErrorsIn('default', [
-            'columns.0.name' => 'Column name is required.'
+            'columns.0.name' => 'Column name is required.',
         ]);
     }
 
@@ -392,8 +392,8 @@ class BoardUpdateTest extends TestCase
             [
                 'id' => $board2Column->id, // Column from different board
                 'name' => 'Test',
-                'position' => 0
-            ]
+                'position' => 0,
+            ],
         ];
 
         $response = $this->actingAs($user)
@@ -401,12 +401,12 @@ class BoardUpdateTest extends TestCase
                 'name' => $board1->name,
                 'description' => $board1->description,
                 'status' => $board1->status,
-                'columns' => $columnsData
+                'columns' => $columnsData,
             ]);
 
         $response->assertSessionHasErrors(['columns']);
         $response->assertSessionHasErrorsIn('default', [
-            'columns' => 'One or more columns do not belong to this board.'
+            'columns' => 'One or more columns do not belong to this board.',
         ]);
     }
 
@@ -417,7 +417,7 @@ class BoardUpdateTest extends TestCase
         $response = $this->put("/boards/{$board->id}", [
             'name' => 'Updated Name',
             'description' => 'Updated description',
-            'status' => 'active'
+            'status' => 'active',
         ]);
 
         $response->assertRedirect('/login');
@@ -433,7 +433,7 @@ class BoardUpdateTest extends TestCase
             ->put("/boards/{$board->id}", [
                 'name' => 'Updated Name',
                 'description' => 'Updated description',
-                'status' => 'active'
+                'status' => 'active',
             ]);
 
         $response->assertForbidden();

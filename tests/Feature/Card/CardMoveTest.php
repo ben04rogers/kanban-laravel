@@ -4,9 +4,9 @@ namespace Tests\Feature\Card;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Models\BoardShare;
 use App\Models\Card;
 use App\Models\User;
-use App\Models\BoardShare;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,28 +17,28 @@ class CardMoveTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create a user and board for testing
         $this->user = User::factory()->create();
         $this->board = Board::factory()->create(['user_id' => $this->user->id]);
-        
+
         // Create default columns for the board
         $this->todoColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'To Do',
-            'position' => 0
+            'position' => 0,
         ]);
-        
+
         $this->inProgressColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'In Progress',
-            'position' => 1
+            'position' => 1,
         ]);
-        
+
         $this->doneColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'Done',
-            'position' => 2
+            'position' => 2,
         ]);
     }
 
@@ -50,13 +50,13 @@ class CardMoveTest extends TestCase
             'board_column_id' => $this->todoColumn->id,
             'position' => 0,
         ]);
-        
+
         $card2 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
             'position' => 1,
         ]);
-        
+
         $card3 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -71,18 +71,18 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         // Check that positions were updated correctly
         $this->assertDatabaseHas('cards', [
             'id' => $card3->id,
             'position' => 0,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card1->id,
             'position' => 1,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card2->id,
             'position' => 2,
@@ -104,7 +104,7 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'board_column_id' => $this->inProgressColumn->id,
@@ -120,7 +120,7 @@ class CardMoveTest extends TestCase
             'board_column_id' => $this->inProgressColumn->id,
             'position' => 0,
         ]);
-        
+
         $existingCard2 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->inProgressColumn->id,
@@ -142,19 +142,19 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         // Check that positions were updated correctly
         $this->assertDatabaseHas('cards', [
             'id' => $existingCard1->id,
             'position' => 0,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $cardToMove->id,
             'board_column_id' => $this->inProgressColumn->id,
             'position' => 1,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $existingCard2->id,
             'position' => 2,
@@ -245,13 +245,13 @@ class CardMoveTest extends TestCase
             'board_column_id' => $this->todoColumn->id,
             'position' => 0,
         ]);
-        
+
         $card2 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
             'position' => 1,
         ]);
-        
+
         $card3 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -266,18 +266,18 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         // Check that positions were updated correctly
         $this->assertDatabaseHas('cards', [
             'id' => $card2->id,
             'position' => 0,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card3->id,
             'position' => 1,
         ]);
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card1->id,
             'position' => 2,
@@ -289,7 +289,7 @@ class CardMoveTest extends TestCase
         $otherUser = User::factory()->create();
         $otherBoard = Board::factory()->create(['user_id' => $otherUser->id]);
         $otherColumn = BoardColumn::factory()->create(['board_id' => $otherBoard->id]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $otherBoard->id,
             'board_column_id' => $otherColumn->id,
@@ -325,7 +325,7 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'board_column_id' => $this->inProgressColumn->id,
@@ -346,7 +346,7 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'board_column_id' => $this->inProgressColumn->id,
@@ -356,13 +356,13 @@ class CardMoveTest extends TestCase
     public function test_card_owner_can_move_their_own_card()
     {
         $cardOwner = User::factory()->create();
-        
+
         // Share board with card owner
         BoardShare::factory()->create([
             'board_id' => $this->board->id,
             'user_id' => $cardOwner->id,
         ]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -376,7 +376,7 @@ class CardMoveTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'board_column_id' => $this->inProgressColumn->id,

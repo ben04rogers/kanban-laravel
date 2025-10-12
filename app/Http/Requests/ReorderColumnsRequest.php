@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Board;
 
 class ReorderColumnsRequest extends FormRequest
 {
@@ -13,6 +12,7 @@ class ReorderColumnsRequest extends FormRequest
     public function authorize(): bool
     {
         $board = $this->route('board');
+
         return $board && $this->user()->can('update', $board);
     }
 

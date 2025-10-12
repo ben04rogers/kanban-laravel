@@ -49,9 +49,7 @@ class BoardService
      * Update board columns (create, update, delete, reorder)
      * Handles all column operations in a single transaction
      *
-     * @param Board $board
-     * @param array $columnsData Array of column data with id (nullable), name, position
-     * @return void
+     * @param  array  $columnsData  Array of column data with id (nullable), name, position
      */
     public function updateBoardColumns(Board $board, array $columnsData): void
     {
@@ -59,7 +57,7 @@ class BoardService
 
         // Delete columns that are not in the new list (validation already checked for cards)
         // Only delete if there are existing column IDs, otherwise whereNotIn([]) would delete all
-        if (!empty($existingColumnIds)) {
+        if (! empty($existingColumnIds)) {
             $board->columns()->whereNotIn('id', $existingColumnIds)->delete();
         } else {
             // If no existing IDs, all columns are new, so delete all old columns
@@ -96,7 +94,7 @@ class BoardService
     {
         foreach ($columns as $columnData) {
             $board->columns()->where('id', $columnData['id'])->update([
-                'position' => $columnData['position']
+                'position' => $columnData['position'],
             ]);
         }
     }

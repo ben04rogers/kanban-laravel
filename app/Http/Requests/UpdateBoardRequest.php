@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Board;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateBoardRequest extends FormRequest
 {
@@ -13,6 +13,7 @@ class UpdateBoardRequest extends FormRequest
     public function authorize(): bool
     {
         $board = $this->route('board');
+
         return $board && $this->user()->can('update', $board);
     }
 
@@ -66,7 +67,7 @@ class UpdateBoardRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            if (!$this->has('columns')) {
+            if (! $this->has('columns')) {
                 return;
             }
 
@@ -74,7 +75,7 @@ class UpdateBoardRequest extends FormRequest
             $columns = $this->input('columns', []);
 
             // Check for duplicate column names
-            $names = array_map(fn($col) => strtolower(trim($col['name'])), $columns);
+            $names = array_map(fn ($col) => strtolower(trim($col['name'])), $columns);
             if (count($names) !== count(array_unique($names))) {
                 $validator->errors()->add('columns', 'Column names must be unique.');
             }
@@ -83,7 +84,7 @@ class UpdateBoardRequest extends FormRequest
             $existingColumnIds = array_filter(array_column($columns, 'id'));
 
             // Get columns that will be deleted (not in the new list)
-            if (!empty($existingColumnIds)) {
+            if (! empty($existingColumnIds)) {
                 $deletedColumns = $board->columns()
                     ->whereNotIn('id', $existingColumnIds)
                     ->withCount('cards')
@@ -103,7 +104,7 @@ class UpdateBoardRequest extends FormRequest
             }
 
             // Validate that columns belong to this board
-            if (!empty($existingColumnIds)) {
+            if (! empty($existingColumnIds)) {
                 $validColumns = $board->columns()->whereIn('id', $existingColumnIds)->count();
                 if ($validColumns !== count($existingColumnIds)) {
                     $validator->errors()->add('columns', 'One or more columns do not belong to this board.');

@@ -20,12 +20,12 @@ class CardService
         $maxPosition = Card::where('board_column_id', $boardColumnId)->max('position') ?? 0;
 
         return Card::create([
-            'title'           => $title,
-            'description'     => $description,
-            'board_id'        => $board->id,
+            'title' => $title,
+            'description' => $description,
+            'board_id' => $board->id,
             'board_column_id' => $boardColumnId,
-            'user_id'         => $assignedUserId,
-            'position'        => $maxPosition + 1,
+            'user_id' => $assignedUserId,
+            'position' => $maxPosition + 1,
         ]);
     }
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\BoardShare;
 
 use App\Models\Board;
@@ -9,7 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class BoardShareStoreTest extends TestCase {
+class BoardShareStoreTest extends TestCase
+{
     use RefreshDatabase;
 
     public function test_authenticated_user_can_share_board()
@@ -18,7 +18,7 @@ class BoardShareStoreTest extends TestCase {
         $otherUser = User::factory()->create();
 
         $board = Board::factory()->create([
-            'user_id' => $owner->id
+            'user_id' => $owner->id,
         ]);
 
         $response = $this->actingAs($owner)

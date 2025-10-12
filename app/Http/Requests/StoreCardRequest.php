@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Board;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCardRequest extends FormRequest
 {
@@ -14,6 +14,7 @@ class StoreCardRequest extends FormRequest
     {
         // Check if user can view the board
         $board = Board::find($this->board_id);
+
         return $board && $this->user()->can('view', $board);
     }
 
@@ -27,10 +28,10 @@ class StoreCardRequest extends FormRequest
                 $board = Board::find($this->board_id);
                 if ($board) {
                     // Check if the assigned user has access to the board
-                    $hasAccess = $board->user_id === $this->assigned_user_id || 
+                    $hasAccess = $board->user_id === $this->assigned_user_id ||
                                 $board->shares()->where('user_id', $this->assigned_user_id)->exists();
-                    
-                    if (!$hasAccess) {
+
+                    if (! $hasAccess) {
                         $validator->errors()->add('assigned_user_id', 'The selected user does not have access to this board.');
                     }
                 }

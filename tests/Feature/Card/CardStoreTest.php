@@ -4,9 +4,9 @@ namespace Tests\Feature\Card;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Models\BoardShare;
 use App\Models\Card;
 use App\Models\User;
-use App\Models\BoardShare;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,22 +17,22 @@ class CardStoreTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create a user and board for testing
         $this->user = User::factory()->create();
         $this->board = Board::factory()->create(['user_id' => $this->user->id]);
-        
+
         // Create default columns for the board
         $this->todoColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'To Do',
-            'position' => 0
+            'position' => 0,
         ]);
-        
+
         $this->inProgressColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'In Progress',
-            'position' => 1
+            'position' => 1,
         ]);
     }
 
@@ -47,7 +47,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'Test Card',
             'description' => 'This is a test card description',
@@ -61,7 +61,7 @@ class CardStoreTest extends TestCase
     public function test_card_creation_with_assigned_user()
     {
         $assignedUser = User::factory()->create();
-        
+
         // Share board with the assigned user
         BoardShare::factory()->create([
             'board_id' => $this->board->id,
@@ -78,7 +78,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'Assigned Card',
             'description' => 'Card assigned to a user',
@@ -96,7 +96,7 @@ class CardStoreTest extends TestCase
             'board_column_id' => $this->todoColumn->id,
             'position' => 1,
         ]);
-        
+
         Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -111,7 +111,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'New Card',
             'board_id' => $this->board->id,
@@ -130,7 +130,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'Card Without Description',
             'description' => null,
@@ -258,7 +258,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'Card by Shared User',
             'board_id' => $this->board->id,
@@ -276,7 +276,7 @@ class CardStoreTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'title' => 'Card by Owner',
             'board_id' => $this->board->id,

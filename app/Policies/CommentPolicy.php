@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CommentPolicy
 {
@@ -51,16 +50,16 @@ class CommentPolicy
     private function canAccessComment(User $user, Comment $comment)
     {
         $card = $comment->card;
-        if (!$card) {
+        if (! $card) {
             return false;
         }
-        
+
         $board = $card->board;
-        if (!$board) {
+        if (! $board) {
             return false;
         }
-        
-        return $user->id === $board->user_id || 
+
+        return $user->id === $board->user_id ||
                $board->shares()->where('user_id', $user->id)->exists();
     }
 

@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Card;
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Models\Card;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Card;
 
 class MoveCardRequest extends FormRequest
 {
@@ -13,6 +12,7 @@ class MoveCardRequest extends FormRequest
     public function authorize(): bool
     {
         $card = $this->route('card');
+
         return $card && $this->user()->can('update', $card);
     }
 

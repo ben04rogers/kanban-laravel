@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('board_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             // Ensure a user can only be shared a board once
             $table->unique(['board_id', 'user_id']);
         });

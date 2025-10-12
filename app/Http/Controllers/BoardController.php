@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Board;
-use App\Models\BoardColumn;
+use App\Http\Requests\ReorderColumnsRequest;
 use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
-use App\Http\Requests\ReorderColumnsRequest;
+use App\Models\Board;
 use App\Services\BoardService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
@@ -15,19 +14,17 @@ class BoardController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(private BoardService $boardService) 
-    {
-    }
+    public function __construct(private BoardService $boardService) {}
 
     public function index()
     {
         $user = auth()->user();
         $status = request()->get('status', 'active'); // Default to active boards
-        $withColumns = ['columns' => fn($query) => $query->orderBy('position')];
-        
+        $withColumns = ['columns' => fn ($query) => $query->orderBy('position')];
+
         $boards = collect()
-            ->merge($user->boards()->where('status', $status)->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', true)))
-            ->merge($user->sharedBoards()->where('status', $status)->with($withColumns)->get()->map(fn($board) => $board->setAttribute('is_owner', false)));
+            ->merge($user->boards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', true)))
+            ->merge($user->sharedBoards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', false)));
 
         return Inertia::render('Boards/Index', compact('boards', 'status'));
     }
@@ -37,14 +34,14 @@ class BoardController extends Controller
         $this->authorize('view', $board);
 
         $board->load([
-            'columns' => function($query) {
+            'columns' => function ($query) {
                 $query->orderBy('position');
             },
-            'columns.cards.user' => function($query) {
+            'columns.cards.user' => function ($query) {
                 $query->orderBy('position');
             },
             'user',
-            'sharedWith'
+            'sharedWith',
         ]);
 
         // Get all users with access to the board (owner + shared users)
@@ -59,7 +56,7 @@ class BoardController extends Controller
 
         return Inertia::render('Boards/Show', [
             'board' => $board,
-            'boardUsers' => $boardUsers
+            'boardUsers' => $boardUsers,
         ]);
     }
 
@@ -109,10 +106,10 @@ class BoardController extends Controller
     public function updateStatus(Board $board)
     {
         $this->authorize('update', $board);
-        
+
         $request = request();
         $status = $request->validate([
-            'status' => 'required|in:active,completed,archived'
+            'status' => 'required|in:active,completed,archived',
         ])['status'];
 
         $board->update(['status' => $status]);
@@ -120,11 +117,10 @@ class BoardController extends Controller
         $statusMessages = [
             'active' => 'Board marked as active',
             'completed' => 'Board marked as completed',
-            'archived' => 'Board archived'
+            'archived' => 'Board archived',
         ];
 
         return redirect()->back()
-            ->with('success', $statusMessages[$status] . ' successfully!');
+            ->with('success', $statusMessages[$status].' successfully!');
     }
-
 }

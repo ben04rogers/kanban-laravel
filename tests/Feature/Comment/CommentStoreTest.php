@@ -5,7 +5,6 @@ namespace Tests\Feature\Comment;
 use App\Models\Board;
 use App\Models\BoardColumn;
 use App\Models\Card;
-use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -22,18 +21,18 @@ class CommentStoreTest extends TestCase
         $card = Card::factory()->create([
             'board_id' => $board->id,
             'board_column_id' => $column->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post(route('comments.store', $card), [
-            'content' => 'This is a test comment'
+            'content' => 'This is a test comment',
         ]);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('comments', [
             'content' => 'This is a test comment',
             'card_id' => $card->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
     }
 
@@ -45,11 +44,11 @@ class CommentStoreTest extends TestCase
         $card = Card::factory()->create([
             'board_id' => $board->id,
             'board_column_id' => $column->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post(route('comments.store', $card), [
-            'content' => ''
+            'content' => '',
         ]);
 
         $response->assertSessionHasErrors(['content']);
@@ -63,11 +62,11 @@ class CommentStoreTest extends TestCase
         $card = Card::factory()->create([
             'board_id' => $board->id,
             'board_column_id' => $column->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post(route('comments.store', $card), [
-            'content' => str_repeat('a', 1001)
+            'content' => str_repeat('a', 1001),
         ]);
 
         $response->assertSessionHasErrors(['content']);

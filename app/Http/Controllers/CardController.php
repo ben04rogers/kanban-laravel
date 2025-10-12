@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Card;
-use App\Models\Board;
-use App\Models\BoardColumn;
+use App\Http\Requests\MoveCardRequest;
 use App\Http\Requests\StoreCardRequest;
 use App\Http\Requests\UpdateCardRequest;
-use App\Http\Requests\MoveCardRequest;
+use App\Models\Board;
+use App\Models\Card;
 use App\Services\CardService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Inertia\Inertia;
@@ -16,30 +15,28 @@ class CardController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct(private CardService $cardService) 
-    {
-    }
+    public function __construct(private CardService $cardService) {}
 
     public function show(Card $card)
     {
         $this->authorize('view', $card);
 
         $card->load(['board', 'column', 'user', 'comments.user']);
-        
+
         // Load the board with all necessary relationships
         $board = $card->board;
         $board->load([
-            'columns' => function($query) {
+            'columns' => function ($query) {
                 $query->orderBy('position');
             },
-            'columns.cards.user' => function($query) {
+            'columns.cards.user' => function ($query) {
                 $query->orderBy('position');
             },
-            'columns.cards.comments.user' => function($query) {
+            'columns.cards.comments.user' => function ($query) {
                 $query->orderBy('created_at', 'desc');
             },
             'user',
-            'sharedWith'
+            'sharedWith',
         ]);
 
         // Get all users with access to the board (owner + shared users)
@@ -52,7 +49,7 @@ class CardController extends Controller
         return Inertia::render('Boards/Show', [
             'board' => $board,
             'boardUsers' => $boardUsers,
-            'cardId' => $card->id
+            'cardId' => $card->id,
         ]);
     }
 
@@ -74,12 +71,12 @@ class CardController extends Controller
 
     public function update(UpdateCardRequest $request, Card $card)
     {
-       $this->cardService->updateCard(
-           $card,
-           $request->title,
-           $request->description,
-           $request->assigned_user_id
-       );
+        $this->cardService->updateCard(
+            $card,
+            $request->title,
+            $request->description,
+            $request->assigned_user_id
+        );
 
         return redirect()->back()
             ->with('success', 'Card updated successfully!');

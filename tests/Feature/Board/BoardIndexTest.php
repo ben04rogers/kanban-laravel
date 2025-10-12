@@ -63,7 +63,7 @@ class BoardIndexTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Board with Description',
-            'description' => 'This is a test description'
+            'description' => 'This is a test description',
         ]);
 
         $response = $this->actingAs($user)
@@ -87,7 +87,7 @@ class BoardIndexTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Board without Description',
-            'description' => null
+            'description' => null,
         ]);
 
         $response = $this->actingAs($user)
@@ -109,7 +109,7 @@ class BoardIndexTest extends TestCase
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
-        
+
         $user1Board = Board::factory()->create(['user_id' => $user1->id, 'name' => 'User 1 Board']);
         $user2Board = Board::factory()->create(['user_id' => $user2->id, 'name' => 'User 2 Board']);
 
@@ -130,7 +130,7 @@ class BoardIndexTest extends TestCase
     public function test_board_index_displays_multiple_boards_in_correct_order()
     {
         $user = User::factory()->create();
-        
+
         // Create boards in different order
         $board3 = Board::factory()->create(['user_id' => $user->id, 'name' => 'Third Board']);
         $board1 = Board::factory()->create(['user_id' => $user->id, 'name' => 'First Board']);

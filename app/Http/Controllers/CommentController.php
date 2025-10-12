@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
-use App\Models\Card;
 use App\Http\Requests\StoreCommentRequest;
+use App\Models\Card;
+use App\Models\Comment;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {

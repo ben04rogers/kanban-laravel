@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
-        
+
         // Configure route model binding for UUIDs
         Route::model('board', Board::class);
         Route::model('card', Card::class);

@@ -4,9 +4,9 @@ namespace Tests\Feature\Card;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Models\BoardShare;
 use App\Models\Card;
 use App\Models\User;
-use App\Models\BoardShare;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -18,16 +18,16 @@ class CardShowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create a user and board for testing
         $this->user = User::factory()->create();
         $this->board = Board::factory()->create(['user_id' => $this->user->id]);
-        
+
         // Create default columns for the board
         $this->todoColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'To Do',
-            'position' => 0
+            'position' => 0,
         ]);
     }
 
@@ -62,7 +62,7 @@ class CardShowTest extends TestCase
     public function test_card_show_loads_card_with_assigned_user()
     {
         $assignedUser = User::factory()->create();
-        
+
         $card = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -87,13 +87,13 @@ class CardShowTest extends TestCase
         $inProgressColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'In Progress',
-            'position' => 1
+            'position' => 1,
         ]);
-        
+
         $doneColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'Done',
-            'position' => 2
+            'position' => 2,
         ]);
 
         $card = Card::factory()->create([
@@ -136,7 +136,7 @@ class CardShowTest extends TestCase
             'title' => 'Card 1',
             'position' => 0,
         ]);
-        
+
         $card2 = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -204,7 +204,7 @@ class CardShowTest extends TestCase
     public function test_card_show_with_nonexistent_card_returns_404()
     {
         $response = $this->actingAs($this->user)
-            ->get("/cards/99999");
+            ->get('/cards/99999');
 
         $response->assertStatus(404);
     }
@@ -230,7 +230,7 @@ class CardShowTest extends TestCase
     public function test_card_show_loads_cards_with_user_information()
     {
         $assignedUser = User::factory()->create(['name' => 'John Doe']);
-        
+
         $card = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -258,7 +258,7 @@ class CardShowTest extends TestCase
         $otherUser = User::factory()->create();
         $otherBoard = Board::factory()->create(['user_id' => $otherUser->id]);
         $otherColumn = BoardColumn::factory()->create(['board_id' => $otherBoard->id]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $otherBoard->id,
             'board_column_id' => $otherColumn->id,
@@ -306,13 +306,13 @@ class CardShowTest extends TestCase
     public function test_card_owner_can_view_their_own_card()
     {
         $cardOwner = User::factory()->create();
-        
+
         // Share board with card owner
         BoardShare::factory()->create([
             'board_id' => $this->board->id,
             'user_id' => $cardOwner->id,
         ]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,

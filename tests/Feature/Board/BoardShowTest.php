@@ -19,9 +19,9 @@ class BoardShowTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Test Board',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
         ]);
-        
+
         // Create some columns for the board
         BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'To Do', 'position' => 0]);
         BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'In Progress', 'position' => 1]);
@@ -59,7 +59,7 @@ class BoardShowTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Test Board',
-            'description' => 'Test Description'
+            'description' => 'Test Description',
         ]);
 
         $response = $this->get("/boards/{$board->id}");
@@ -73,9 +73,9 @@ class BoardShowTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Multi-Column Board',
-            'description' => 'Board with many columns'
+            'description' => 'Board with many columns',
         ]);
-        
+
         // Create multiple columns
         BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'To Do', 'position' => 0]);
         BoardColumn::factory()->create(['board_id' => $board->id, 'name' => 'In Progress', 'position' => 1]);
@@ -117,7 +117,7 @@ class BoardShowTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'User Board',
-            'description' => 'Board with user info'
+            'description' => 'Board with user info',
         ]);
 
         $response = $this->actingAs($user)
@@ -140,7 +140,7 @@ class BoardShowTest extends TestCase
         $board = Board::factory()->create([
             'user_id' => $user->id,
             'name' => 'Shared Board',
-            'description' => 'Board with shared users'
+            'description' => 'Board with shared users',
         ]);
 
         $response = $this->actingAs($user)
@@ -161,7 +161,7 @@ class BoardShowTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->get("/boards/99999");
+            ->get('/boards/99999');
 
         $response->assertStatus(404);
     }

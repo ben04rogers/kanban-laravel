@@ -28,13 +28,13 @@ class CardPolicy
         if ($user->id === $card->user_id) {
             return true;
         }
-        
+
         $board = \App\Models\Board::find($card->board_id);
-        if (!$board) {
+        if (! $board) {
             return false;
         }
-        
-        return $user->id === $board->user_id || 
+
+        return $user->id === $board->user_id ||
                $board->shares()->where('user_id', $user->id)->exists();
     }
 }

@@ -44,7 +44,7 @@ class BoardShareService
 
         return BoardShare::create([
             'board_id' => $board->id,
-            'user_id' => $userId
+            'user_id' => $userId,
         ]);
     }
 

@@ -22,12 +22,12 @@ class CommentDeleteTest extends TestCase
         $card = Card::factory()->create([
             'board_id' => $board->id,
             'board_column_id' => $column->id,
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
         $comment = Comment::factory()->create([
             'card_id' => $card->id,
             'user_id' => $user->id,
-            'content' => 'Test comment'
+            'content' => 'Test comment',
         ]);
 
         $response = $this->actingAs($user)->delete(route('comments.destroy', $comment));
@@ -45,12 +45,12 @@ class CommentDeleteTest extends TestCase
         $card = Card::factory()->create([
             'board_id' => $board->id,
             'board_column_id' => $column->id,
-            'user_id' => $user1->id
+            'user_id' => $user1->id,
         ]);
         $comment = Comment::factory()->create([
             'card_id' => $card->id,
             'user_id' => $user1->id,
-            'content' => 'Test comment'
+            'content' => 'Test comment',
         ]);
 
         $response = $this->actingAs($user2)->delete(route('comments.destroy', $comment));

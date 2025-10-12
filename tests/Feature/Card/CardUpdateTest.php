@@ -4,9 +4,9 @@ namespace Tests\Feature\Card;
 
 use App\Models\Board;
 use App\Models\BoardColumn;
+use App\Models\BoardShare;
 use App\Models\Card;
 use App\Models\User;
-use App\Models\BoardShare;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,16 +17,16 @@ class CardUpdateTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create a user and board for testing
         $this->user = User::factory()->create();
         $this->board = Board::factory()->create(['user_id' => $this->user->id]);
-        
+
         // Create default columns for the board
         $this->todoColumn = BoardColumn::factory()->create([
             'board_id' => $this->board->id,
             'name' => 'To Do',
-            'position' => 0
+            'position' => 0,
         ]);
     }
 
@@ -45,7 +45,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated Card Title',
@@ -74,7 +74,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Assigned Card',
@@ -144,7 +144,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated Title',
@@ -167,7 +167,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated Title',
@@ -180,7 +180,7 @@ class CardUpdateTest extends TestCase
         $otherUser = User::factory()->create();
         $otherBoard = Board::factory()->create(['user_id' => $otherUser->id]);
         $otherColumn = BoardColumn::factory()->create(['board_id' => $otherBoard->id]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $otherBoard->id,
             'board_column_id' => $otherColumn->id,
@@ -214,7 +214,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated by Shared User',
@@ -234,7 +234,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated by Owner',
@@ -244,13 +244,13 @@ class CardUpdateTest extends TestCase
     public function test_card_owner_can_update_their_own_card()
     {
         $cardOwner = User::factory()->create();
-        
+
         // Share board with card owner
         BoardShare::factory()->create([
             'board_id' => $this->board->id,
             'user_id' => $cardOwner->id,
         ]);
-        
+
         $card = Card::factory()->create([
             'board_id' => $this->board->id,
             'board_column_id' => $this->todoColumn->id,
@@ -263,7 +263,7 @@ class CardUpdateTest extends TestCase
             ]);
 
         $response->assertRedirect();
-        
+
         $this->assertDatabaseHas('cards', [
             'id' => $card->id,
             'title' => 'Updated by Card Owner',

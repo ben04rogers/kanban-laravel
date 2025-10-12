@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Card;
 use App\Models\Board;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCardRequest extends FormRequest
 {
@@ -14,6 +13,7 @@ class UpdateCardRequest extends FormRequest
     public function authorize(): bool
     {
         $card = $this->route('card');
+
         return $card && $this->user()->can('update', $card);
     }
 
@@ -28,10 +28,10 @@ class UpdateCardRequest extends FormRequest
                 if ($card) {
                     $board = $card->board;
                     // Check if the assigned user has access to the board
-                    $hasAccess = $board->user_id === $this->assigned_user_id || 
+                    $hasAccess = $board->user_id === $this->assigned_user_id ||
                                 $board->shares()->where('user_id', $this->assigned_user_id)->exists();
-                    
-                    if (!$hasAccess) {
+
+                    if (! $hasAccess) {
                         $validator->errors()->add('assigned_user_id', 'The selected user does not have access to this board.');
                     }
                 }
