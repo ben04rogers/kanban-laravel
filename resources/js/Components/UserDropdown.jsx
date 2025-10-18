@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import UserAvatar from '@/Components/UserAvatar';
 
 export default function UserDropdown({ 
     users = [], 
@@ -103,9 +104,7 @@ export default function UserDropdown({
                 {selectedUser ? (
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                {selectedUser.name.charAt(0).toUpperCase()}
-                            </div>
+                            <UserAvatar user={selectedUser} size="md" />
                             <span className="text-gray-900">{selectedUser.name}</span>
                         </div>
                         {!disabled && (
@@ -151,9 +150,7 @@ export default function UserDropdown({
                                 onClick={() => handleUserSelect(user)}
                                 onMouseEnter={() => setHighlightedIndex(index)}
                             >
-                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                    {user.name.charAt(0).toUpperCase()}
-                                </div>
+                                <UserAvatar user={user} size="md" />
                                 <div className="flex-1 min-w-0">
                                     <div className="text-sm font-medium truncate">
                                         {user.name}

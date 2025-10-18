@@ -7,6 +7,7 @@ import { useToast } from '@/Contexts/ToastContext';
 import UserDropdown from '@/Components/UserDropdown';
 import CommentList from '@/Components/CommentList';
 import CommentForm from '@/Components/CommentForm';
+import UserAvatar from '@/Components/UserAvatar';
 
 export default function CardDetailModal({ 
     isOpen, 
@@ -168,9 +169,7 @@ export default function CardDetailModal({
                                     <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white">
                                         {card.user ? (
                                             <div className="flex items-center space-x-2">
-                                                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                                    {card.user.name.charAt(0).toUpperCase()}
-                                                </div>
+                                                <UserAvatar user={card.user} size="md" />
                                                 <span className="text-gray-900">{card.user.name}</span>
                                             </div>
                                         ) : (

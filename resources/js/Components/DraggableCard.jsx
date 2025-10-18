@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { draggable, dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
+import UserAvatar from './UserAvatar';
 
 export default function DraggableCard({ 
     card, 
@@ -80,9 +81,7 @@ export default function DraggableCard({
             <div className="flex items-center justify-between">
                 {card.user ? (
                     <div className="flex items-center space-x-1">
-                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
-                            {card.user.name.charAt(0).toUpperCase()}
-                        </div>
+                        <UserAvatar user={card.user} size="xs" />
                         <span className="text-xs text-gray-600">{card.user.name}</span>
                     </div>
                 ) : (

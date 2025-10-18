@@ -40,6 +40,7 @@ class BoardController extends Controller
             'columns.cards.user' => function ($query) {
                 $query->orderBy('position');
             },
+            'columns.cards.comments.user',
             'user',
             'sharedWith',
         ]);

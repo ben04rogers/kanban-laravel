@@ -2,6 +2,7 @@ import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useToast } from '@/Contexts/ToastContext';
+import UserAvatar from '@/Components/UserAvatar';
 
 export default function CommentForm({ cardId, currentUser }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -34,9 +35,7 @@ export default function CommentForm({ cardId, currentUser }) {
         <div className="pt-4">
             <div className="flex space-x-3">
                 <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                        {currentUser.name.charAt(0).toUpperCase()}
-                    </div>
+                    <UserAvatar user={currentUser} size="md" />
                 </div>
                 <div className="flex-1 min-w-0">
                     {!isExpanded ? (

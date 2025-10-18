@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useToast } from '@/Contexts/ToastContext';
 import { useState } from 'react';
+import UserAvatar from '@/Components/UserAvatar';
 
 export default function CommentList({ comments = [], currentUser }) {
     const { success, error } = useToast();
@@ -63,9 +64,7 @@ export default function CommentList({ comments = [], currentUser }) {
             {comments.map((comment) => (
                 <div key={comment.id} className="flex space-x-3">
                     <div className="flex-shrink-0">
-                        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                            {comment.user.name.charAt(0).toUpperCase()}
-                        </div>
+                        <UserAvatar user={comment.user} size="md" />
                     </div>
                     <div className="flex-1 min-w-0">
                         <div className="bg-gray-50 rounded-lg px-4 py-3">
