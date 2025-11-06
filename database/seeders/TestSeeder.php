@@ -65,22 +65,22 @@ class TestSeeder extends Seeder
         // Create boards for different aspects of the project
         $boards = [
             [
-                'name' => 'TaskFlow Pro - Core Platform',
+                'name' => 'CodeCollab - Core Platform',
                 'description' => 'Main development board for core platform features',
                 'owner' => $createdUsers[0], // Sarah Chen (Project Manager)
             ],
             [
-                'name' => 'TaskFlow Pro - Mobile App',
+                'name' => 'CodeCollab - Mobile App',
                 'description' => 'React Native mobile application development',
                 'owner' => $createdUsers[3], // David Kim (Mobile Developer)
             ],
             [
-                'name' => 'TaskFlow Pro - DevOps & Infrastructure',
+                'name' => 'CodeCollab - DevOps & Infrastructure',
                 'description' => 'CI/CD, deployment, monitoring, and infrastructure tasks',
                 'owner' => $createdUsers[6], // James Wilson (DevOps Engineer)
             ],
             [
-                'name' => 'TaskFlow Pro - UI/UX Design',
+                'name' => 'CodeCollab - UI/UX Design',
                 'description' => 'Design system, user research, and interface improvements',
                 'owner' => $createdUsers[5], // Lisa Park (UX Designer)
             ],
@@ -151,74 +151,74 @@ class TestSeeder extends Seeder
         // Core Platform Cards
         $corePlatformCards = [
             [
-                'title' => 'Implement OAuth 2.0 Authentication',
-                'description' => 'Set up Google, GitHub, and Microsoft OAuth providers for user authentication. Include proper token refresh logic and security measures.',
+                'title' => 'Implement Code Review System',
+                'description' => 'Build pull request review interface with inline comments, code suggestions, and approval workflow. Support syntax highlighting for multiple languages.',
                 'column' => 'In Progress',
                 'assignee' => $users[1], // Marcus Rodriguez (Backend Developer)
             ],
             [
-                'title' => 'Build Real-time Collaboration System',
-                'description' => 'Implement WebSocket connections for real-time updates when multiple users are editing the same board simultaneously.',
+                'title' => 'Build Real-time Code Collaboration',
+                'description' => 'Implement WebSocket connections for live code editing with multiple cursors, conflict resolution, and presence indicators showing who\'s viewing files.',
                 'column' => 'To Do',
                 'assignee' => $users[2], // Emily Johnson (Full-stack Developer)
             ],
             [
-                'title' => 'Create Advanced Filtering System',
-                'description' => 'Add filters for cards by assignee, due date, labels, and custom fields. Include saved filter presets.',
+                'title' => 'Create Repository Management',
+                'description' => 'Add Git repository integration with branch management, commit history visualization, and merge conflict resolution tools.',
                 'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Implement File Attachments',
-                'description' => 'Allow users to attach files to cards with drag-and-drop functionality. Include image previews and file size limits.',
+                'title' => 'Implement File Diff Viewer',
+                'description' => 'Build side-by-side and unified diff views with syntax highlighting, line-by-line comments, and ability to stage/unstage changes.',
                 'column' => 'Code Review',
                 'assignee' => $users[4], // Alex Thompson (Frontend Developer)
             ],
             [
-                'title' => 'Add Bulk Operations',
-                'description' => 'Enable bulk editing of cards - move multiple cards, assign to users, add labels, etc.',
+                'title' => 'Add Issue Tracking Integration',
+                'description' => 'Connect code changes to issues with automatic linking, status updates on merge, and issue creation from code comments.',
                 'column' => 'Testing',
                 'assignee' => $users[4], // Alex Thompson
             ],
             [
                 'title' => 'Create API Rate Limiting',
-                'description' => 'Implement proper rate limiting for API endpoints to prevent abuse and ensure fair usage.',
+                'description' => 'Implement proper rate limiting for API endpoints to prevent abuse and ensure fair usage across all users.',
                 'column' => 'Done',
                 'assignee' => $users[6], // James Wilson (DevOps)
             ],
             [
-                'title' => 'Implement Search Functionality',
-                'description' => 'Add global search across boards, cards, and descriptions with advanced query capabilities.',
+                'title' => 'Implement Code Search',
+                'description' => 'Add full-text search across repositories with regex support, file type filters, and search result highlighting.',
                 'column' => 'To Do',
                 'assignee' => $users[2], // Emily Johnson
             ],
             [
-                'title' => 'Add Card Templates',
-                'description' => 'Create reusable card templates for common task types to speed up project setup.',
+                'title' => 'Add CI/CD Pipeline Builder',
+                'description' => 'Create visual pipeline editor for configuring build, test, and deployment workflows with YAML export.',
                 'column' => 'In Progress',
                 'assignee' => $users[4], // Alex Thompson
             ],
             [
                 'title' => 'Implement Activity Feed',
-                'description' => 'Track and display all board activities including card moves, assignments, and comments.',
+                'description' => 'Track and display all repository activities including commits, pull requests, merges, and team member actions.',
                 'column' => 'Code Review',
                 'assignee' => $users[1], // Marcus Rodriguez
             ],
             [
-                'title' => 'Add Custom Fields to Cards',
-                'description' => 'Allow users to add custom fields like priority, effort estimation, and due dates.',
+                'title' => 'Add Code Snippet Sharing',
+                'description' => 'Allow users to create and share reusable code snippets with syntax highlighting, tags, and version history.',
                 'column' => 'Testing',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Implement Board Templates',
-                'description' => 'Create predefined board layouts for different project types (Sprint, Bug Tracking, etc.).',
+                'title' => 'Implement Branch Protection Rules',
+                'description' => 'Create configurable rules for branch protection including required reviews, status checks, and merge restrictions.',
                 'column' => 'Done',
                 'assignee' => $users[0], // Sarah Chen (Project Manager)
             ],
             [
                 'title' => 'Add Keyboard Shortcuts',
-                'description' => 'Implement keyboard shortcuts for common actions like creating cards, moving between boards.',
+                'description' => 'Implement keyboard shortcuts for common actions like creating branches, opening files, and navigating code.',
                 'column' => 'To Do',
                 'assignee' => $users[4], // Alex Thompson
             ],
@@ -227,62 +227,62 @@ class TestSeeder extends Seeder
         // Mobile App Cards
         $mobileAppCards = [
             [
-                'title' => 'Implement Offline Mode',
-                'description' => 'Allow users to view and edit boards when offline. Sync changes when connection is restored.',
+                'title' => 'Implement Offline Code Viewing',
+                'description' => 'Allow users to view code files and repositories when offline. Cache recently viewed files and sync changes when connection is restored.',
                 'column' => 'In Progress',
                 'assignee' => $users[3], // David Kim (Mobile Developer)
             ],
             [
-                'title' => 'Add Push Notifications',
-                'description' => 'Notify users about card assignments, due dates, and mentions. Include notification preferences.',
+                'title' => 'Add Push Notifications for PRs',
+                'description' => 'Notify users about pull request reviews, merge requests, code comments, and build status updates. Include notification preferences.',
                 'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
                 'title' => 'Optimize App Performance',
-                'description' => 'Reduce bundle size, implement lazy loading, and optimize image handling for better performance.',
+                'description' => 'Reduce bundle size, implement lazy loading for large files, and optimize syntax highlighting rendering for better performance.',
                 'column' => 'Testing',
                 'assignee' => $users[3], // David Kim
             ],
             [
                 'title' => 'Add Biometric Authentication',
-                'description' => 'Implement fingerprint and face ID authentication for mobile app security.',
+                'description' => 'Implement fingerprint and face ID authentication for mobile app security when accessing repositories.',
                 'column' => 'Code Review',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Implement Gesture Navigation',
-                'description' => 'Add swipe gestures for card navigation and board switching for better mobile UX.',
+                'title' => 'Implement Mobile Code Editor',
+                'description' => 'Add touch-optimized code editor with syntax highlighting, auto-completion, and basic editing capabilities for quick fixes on mobile.',
                 'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Add Haptic Feedback',
-                'description' => 'Implement haptic feedback for card interactions, drag operations, and notifications.',
+                'title' => 'Add Swipe Gestures for Navigation',
+                'description' => 'Implement swipe gestures for navigating between files, switching branches, and dismissing code review comments.',
                 'column' => 'In Progress',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Create Widget Support',
-                'description' => 'Add iOS and Android home screen widgets showing board overview and quick actions.',
+                'title' => 'Create Home Screen Widgets',
+                'description' => 'Add iOS and Android widgets showing repository status, open pull requests count, and recent commits.',
                 'column' => 'Code Review',
                 'assignee' => $users[3], // David Kim
             ],
             [
                 'title' => 'Implement Dark Mode',
-                'description' => 'Add system-aware dark mode support with smooth theme transitions.',
+                'description' => 'Add system-aware dark mode support with syntax highlighting optimized for dark themes and smooth theme transitions.',
                 'column' => 'Testing',
                 'assignee' => $users[3], // David Kim
             ],
             [
-                'title' => 'Add Voice Commands',
-                'description' => 'Implement voice-to-text for card creation and basic voice navigation commands.',
+                'title' => 'Add Quick Actions',
+                'description' => 'Implement quick actions for common tasks like creating branches, approving PRs, and viewing diffs from notifications.',
                 'column' => 'To Do',
                 'assignee' => $users[3], // David Kim
             ],
             [
                 'title' => 'Optimize for Tablets',
-                'description' => 'Enhance tablet experience with multi-column layouts and larger touch targets.',
+                'description' => 'Enhance tablet experience with split-screen code viewing, multi-file tabs, and larger touch targets for better code navigation.',
                 'column' => 'Done',
                 'assignee' => $users[3], // David Kim
             ],
@@ -292,61 +292,61 @@ class TestSeeder extends Seeder
         $devOpsCards = [
             [
                 'title' => 'Set up Kubernetes Cluster',
-                'description' => 'Deploy application to Kubernetes with proper scaling, health checks, and resource limits.',
+                'description' => 'Deploy CodeCollab application to Kubernetes with proper scaling, health checks, and resource limits for Git operations.',
                 'column' => 'To Do',
                 'assignee' => $users[6], // James Wilson (DevOps)
             ],
             [
                 'title' => 'Implement CI/CD Pipeline',
-                'description' => 'Create automated testing, building, and deployment pipeline with GitHub Actions.',
+                'description' => 'Create automated testing, building, and deployment pipeline with GitHub Actions for all repository integrations.',
                 'column' => 'In Progress',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Set up Monitoring & Alerting',
-                'description' => 'Configure Prometheus, Grafana, and alerting for application performance and error tracking.',
+                'description' => 'Configure Prometheus, Grafana, and alerting for application performance, Git operation metrics, and error tracking.',
                 'column' => 'Code Review',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Database Backup Strategy',
-                'description' => 'Implement automated daily backups with point-in-time recovery capabilities.',
+                'description' => 'Implement automated daily backups for repository metadata, user data, and code review history with point-in-time recovery.',
                 'column' => 'Testing',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Implement Blue-Green Deployment',
-                'description' => 'Set up zero-downtime deployment strategy with automatic rollback capabilities.',
+                'description' => 'Set up zero-downtime deployment strategy for code collaboration features with automatic rollback capabilities.',
                 'column' => 'To Do',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Configure Auto-scaling',
-                'description' => 'Implement horizontal pod autoscaling based on CPU and memory usage metrics.',
+                'description' => 'Implement horizontal pod autoscaling based on CPU, memory usage, and concurrent Git operation metrics.',
                 'column' => 'In Progress',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Set up Log Aggregation',
-                'description' => 'Implement centralized logging with ELK stack for better debugging and analysis.',
+                'description' => 'Implement centralized logging with ELK stack for Git operations, API requests, and code review activities.',
                 'column' => 'Code Review',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Implement Security Scanning',
-                'description' => 'Add automated security scanning for dependencies and container vulnerabilities.',
+                'description' => 'Add automated security scanning for dependencies, container vulnerabilities, and code security analysis.',
                 'column' => 'Testing',
                 'assignee' => $users[6], // James Wilson
             ],
             [
                 'title' => 'Create Disaster Recovery Plan',
-                'description' => 'Document and test disaster recovery procedures with RTO/RPO targets.',
+                'description' => 'Document and test disaster recovery procedures for repository data and user code with RTO/RPO targets.',
                 'column' => 'Done',
                 'assignee' => $users[6], // James Wilson
             ],
             [
-                'title' => 'Optimize Database Performance',
-                'description' => 'Implement database indexing, query optimization, and connection pooling.',
+                'title' => 'Optimize Git Storage Performance',
+                'description' => 'Implement Git repository storage optimization, indexing for large repos, and connection pooling for Git operations.',
                 'column' => 'To Do',
                 'assignee' => $users[6], // James Wilson
             ],
@@ -356,67 +356,67 @@ class TestSeeder extends Seeder
         $designCards = [
             [
                 'title' => 'Create Design System Documentation',
-                'description' => 'Document all components, colors, typography, and spacing guidelines for consistent design.',
+                'description' => 'Document all components, colors, typography, and spacing guidelines for consistent design across code editor, diff views, and repository interfaces.',
                 'column' => 'Code Review',
                 'assignee' => $users[5], // Lisa Park (UX Designer)
             ],
             [
-                'title' => 'Conduct User Research for Mobile',
-                'description' => 'Interview 10 mobile users to understand their workflow and pain points with current mobile experience.',
+                'title' => 'Conduct User Research for Code Review',
+                'description' => 'Interview 10 developers to understand their code review workflow, pain points with current interface, and desired improvements.',
                 'column' => 'To Do',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Design Dark Mode Theme',
-                'description' => 'Create comprehensive dark mode design for all components and pages.',
+                'description' => 'Create comprehensive dark mode design for code editor, syntax highlighting, and all UI components optimized for extended coding sessions.',
                 'column' => 'In Progress',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
-                'title' => 'Redesign Onboarding Flow',
-                'description' => 'Simplify the new user onboarding process with better visual guidance and fewer steps.',
+                'title' => 'Redesign Repository Onboarding',
+                'description' => 'Simplify the new user onboarding process for connecting repositories with better visual guidance and step-by-step instructions.',
                 'column' => 'Testing',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Accessibility Audit & Improvements',
-                'description' => 'Audit current interface for WCAG compliance and implement necessary improvements.',
+                'description' => 'Audit current interface for WCAG compliance, especially for code viewing and navigation, and implement necessary improvements.',
                 'column' => 'Done',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
-                'title' => 'Create User Journey Maps',
-                'description' => 'Map out complete user journeys from signup to advanced board management.',
+                'title' => 'Create Developer User Journey Maps',
+                'description' => 'Map out complete user journeys from repository connection to code review, merge, and collaboration workflows.',
                 'column' => 'To Do',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
-                'title' => 'Design Mobile-First Components',
-                'description' => 'Create mobile-optimized versions of all UI components with touch-friendly interactions.',
+                'title' => 'Design Mobile Code Viewing Components',
+                'description' => 'Create mobile-optimized versions of code viewer, diff display, and file navigation with touch-friendly interactions.',
                 'column' => 'In Progress',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
-                'title' => 'Implement Micro-interactions',
-                'description' => 'Add subtle animations and transitions to enhance user experience and provide feedback.',
+                'title' => 'Implement Code Review Micro-interactions',
+                'description' => 'Add subtle animations for code highlighting, comment threads, merge animations, and status updates to enhance developer experience.',
                 'column' => 'Code Review',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Create Brand Guidelines',
-                'description' => 'Establish comprehensive brand guidelines including logo usage, color palettes, and voice.',
+                'description' => 'Establish comprehensive brand guidelines for CodeCollab including logo usage, color palettes optimized for code viewing, and developer-focused voice.',
                 'column' => 'Testing',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
                 'title' => 'Design Error States & Empty States',
-                'description' => 'Create helpful and engaging designs for error messages and empty board states.',
+                'description' => 'Create helpful and engaging designs for error messages (merge conflicts, build failures) and empty repository states.',
                 'column' => 'Done',
                 'assignee' => $users[5], // Lisa Park
             ],
             [
-                'title' => 'Conduct A/B Testing Framework',
-                'description' => 'Set up testing framework for different UI variations and user flows.',
+                'title' => 'Conduct A/B Testing for Code Review UI',
+                'description' => 'Set up testing framework for different code review interface variations, comment placement, and diff view layouts.',
                 'column' => 'To Do',
                 'assignee' => $users[5], // Lisa Park
             ],
