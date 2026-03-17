@@ -141,7 +141,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
             <Head title={board.name} />
 
             <div className="py-12">
-                <div className={`mx-auto sm:px-6 lg:px-8 ${isExpanded ? 'max-w-none px-4' : 'max-w-7xl'}`}>
+                <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${isExpanded ? 'sm:max-w-none' : 'sm:max-w-7xl'} max-w-none`}>
                     {/* Breadcrumb */}
                     <div className="mb-6">
                         <Breadcrumb items={breadcrumbItems} />
@@ -149,12 +149,12 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                     
                     {/* Board Header */}
                     <div className="bg-white shadow-sm sm:rounded-lg mb-6">
-                        <div className="p-6">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <h1 className="text-2xl font-bold text-gray-900">{board.name}</h1>
-                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        <div className="p-4 sm:p-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                                <div className="min-w-0">
+                                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">{board.name}</h1>
+                                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium shrink-0 ${
                                             board.status === 'active' ? 'bg-blue-100 text-blue-800' :
                                             board.status === 'completed' ? 'bg-green-100 text-green-800' :
                                             'bg-gray-100 text-gray-800'
@@ -164,15 +164,15 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                         </span>
                                     </div>
                                     {board.description && (
-                                        <p className="text-gray-600 mt-2">{board.description}</p>
+                                        <p className="text-gray-600 mt-2 text-sm sm:text-base">{board.description}</p>
                                     )}
                                 </div>
                                 
-                                <div className="flex items-center space-x-3">
-                                    {/* Board Width Toggle */}
+                                <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
+                                    {/* Board Width Toggle - hidden on mobile */}
                                     <button
                                         onClick={toggleExpanded}
-                                        className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                                        className={`hidden sm:flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
                                             isExpanded 
                                                 ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
                                                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -200,7 +200,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                     {board.is_creator ? (
                                         <Dropdown>
                                             <Dropdown.Trigger>
-                                                <button className="flex items-center px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <button className="flex items-center justify-center px-4 py-2 w-full sm:w-auto text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
                                                     <span>Actions</span>
                                                     <svg className="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -263,7 +263,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                     ) : (
                                         <button
                                             onClick={() => setShowCardModal(true)}
-                                            className="flex items-center pr-4 pl-2 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                            className="flex items-center justify-center px-4 py-2 w-full sm:w-auto text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                                         >
                                             <svg className="h-4 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -277,7 +277,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                     </div>
 
                     {/* Kanban Board */}
-                    <div className={`bg-white shadow-sm sm:rounded-lg overflow-x-auto ${isExpanded ? 'px-4' : 'px-6'}`}>
+                    <div className={`bg-white shadow-sm sm:rounded-lg overflow-x-auto px-4 sm:px-6`}>
                         <div className="py-6">
                             <div className="flex gap-6 min-w-max" style={{ paddingRight: isExpanded ? '1rem' : '1.5rem' }}>
                                 {board.columns.map((column) => (
