@@ -65,10 +65,10 @@ export default function Index({ boards, status = 'active' }) {
                     
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <div className="flex justify-between items-center mb-6">
+                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-bold">{getStatusLabel(status)}</h2>
-                                    <div className="flex space-x-2 mt-2">
+                                    <h2 className="text-xl sm:text-2xl font-bold">{getStatusLabel(status)}</h2>
+                                    <div className="flex flex-wrap gap-2 mt-2">
                                         <button
                                             onClick={() => handleStatusChange('active')}
                                             className={`px-3 py-1 text-sm rounded-full transition-colors ${
@@ -102,9 +102,12 @@ export default function Index({ boards, status = 'active' }) {
                                     </div>
                                 </div>
                                 {status === 'active' && (
-                                    <PrimaryButton onClick={() => setShowCreateModal(true)}>
+                                    <button 
+                                        onClick={() => setShowCreateModal(true)}
+                                        className="w-full sm:w-auto inline-flex items-center justify-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900"
+                                    >
                                         Create Board
-                                    </PrimaryButton>
+                                    </button>
                                 )}
                             </div>
 
