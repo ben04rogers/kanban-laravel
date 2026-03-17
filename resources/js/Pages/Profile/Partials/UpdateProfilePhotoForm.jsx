@@ -100,7 +100,7 @@ export default function UpdateProfilePhotoForm({ className = '' }) {
                             </div>
                         )}
 
-                        <div className="flex gap-2">
+                        <div className="flex flex-col sm:flex-row gap-2">
                             <SecondaryButton type="button" onClick={selectNewPhoto}>
                                 Select New Photo
                             </SecondaryButton>
