@@ -11,7 +11,6 @@ Velocity is a collaborative project management application featuring drag and dr
 - **Drag & Drop Kanban Boards**: Intuitive drag-and-drop interface for organising tasks across customizable columns
 - **User Assignment**: Assign cards to team members with visual user indicators and assignment management
 - **Board Sharing**: Collaborate with team members by sharing boards with different access levels
-- **Real-time Updates**: Live updates when multiple users are working on the same board
 - **Rich Text Editing**: Detailed card descriptions with TinyMCE rich text editor
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 
