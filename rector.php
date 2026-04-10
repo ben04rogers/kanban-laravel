@@ -23,4 +23,5 @@ return RectorConfig::configure()
         SetList::EARLY_RETURN,
         SetList::PRIVATIZATION,
         SetList::NAMING,
+        SetList::RECTOR_PRESET,
     ]);

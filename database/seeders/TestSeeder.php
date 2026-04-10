@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\Board;
@@ -545,7 +547,7 @@ class TestSeeder extends Seeder
             // Randomly decide how many comments to add (1-4 comments per card)
             $commentCount = rand(1, 4);
 
-            for ($i = 0; $i < $commentCount; $i++) {
+            for ($i = 0; $i < $commentCount; ++$i) {
                 // Randomly select a user (excluding the card assignee sometimes for variety)
                 $commentUser = $users[array_rand($users)];
 
