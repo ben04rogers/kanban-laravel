@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('boards', function (Blueprint $table) {
-            $table->enum('status', ['active', 'completed', 'archived'])->default('active')->after('description');
+        Schema::table('boards', function (Blueprint $blueprint): void {
+            $blueprint->enum('status', ['active', 'completed', 'archived'])->default('active')->after('description');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('boards', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('boards', function (Blueprint $blueprint): void {
+            $blueprint->dropColumn('status');
         });
     }
 };

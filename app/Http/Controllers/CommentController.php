@@ -11,12 +11,12 @@ class CommentController extends Controller
 {
     use AuthorizesRequests;
 
-    public function store(StoreCommentRequest $request, Card $card)
+    public function store(StoreCommentRequest $storeCommentRequest, Card $card)
     {
         $this->authorize('view', $card);
 
         $comment = Comment::create([
-            'content' => $request->content,
+            'content' => $storeCommentRequest->content,
             'card_id' => $card->id,
             'user_id' => auth()->id(),
         ]);

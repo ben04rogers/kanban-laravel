@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('board_shares', function (Blueprint $table) {
-            $table->id();
-            $table->foreignUuid('board_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('board_shares', function (Blueprint $blueprint): void {
+            $blueprint->id();
+            $blueprint->foreignUuid('board_id')->constrained()->onDelete('cascade');
+            $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $blueprint->timestamps();
 
             // Ensure a user can only be shared a board once
-            $table->unique(['board_id', 'user_id']);
+            $blueprint->unique(['board_id', 'user_id']);
         });
     }
 

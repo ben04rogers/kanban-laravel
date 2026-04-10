@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cards', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->integer('position')->default(0);
-            $table->foreignUuid('board_id')->constrained()->onDelete('cascade');
-            $table->foreignId('board_column_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('cards', function (Blueprint $blueprint): void {
+            $blueprint->uuid('id')->primary();
+            $blueprint->string('title');
+            $blueprint->text('description')->nullable();
+            $blueprint->integer('position')->default(0);
+            $blueprint->foreignUuid('board_id')->constrained()->onDelete('cascade');
+            $blueprint->foreignId('board_column_id')->constrained()->onDelete('cascade');
+            $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $blueprint->timestamps();
         });
     }
 

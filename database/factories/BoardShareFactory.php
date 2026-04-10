@@ -32,7 +32,7 @@ class BoardShareFactory extends Factory
      */
     public function forBoardAndUser(Board $board, User $user): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'board_id' => $board->id,
             'user_id' => $user->id,
         ]);

@@ -26,7 +26,7 @@ class BoardController extends Controller
             ->merge($user->boards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', true)))
             ->merge($user->sharedBoards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', false)));
 
-        return Inertia::render('Boards/Index', compact('boards', 'status'));
+        return Inertia::render('Boards/Index', ['boards' => $boards, 'status' => $status]);
     }
 
     public function show(Board $board)
@@ -34,10 +34,10 @@ class BoardController extends Controller
         $this->authorize('view', $board);
 
         $board->load([
-            'columns' => function ($query) {
+            'columns' => function ($query): void {
                 $query->orderBy('position');
             },
-            'columns.cards.user' => function ($query) {
+            'columns.cards.user' => function ($query): void {
                 $query->orderBy('position');
             },
             'columns.cards.comments.user',
@@ -61,26 +61,26 @@ class BoardController extends Controller
         ]);
     }
 
-    public function store(StoreBoardRequest $request)
+    public function store(StoreBoardRequest $storeBoardRequest)
     {
         $board = $this->boardService->createBoard(
             auth()->id(),
-            $request->name,
-            $request->description
+            $storeBoardRequest->name,
+            $storeBoardRequest->description
         );
 
         return redirect()->route('boards.show', $board)
             ->with('success', 'Board created successfully!');
     }
 
-    public function update(UpdateBoardRequest $request, Board $board)
+    public function update(UpdateBoardRequest $updateBoardRequest, Board $board)
     {
         $this->boardService->updateBoard(
             $board,
-            $request->name,
-            $request->description,
-            $request->status,
-            $request->input('columns')
+            $updateBoardRequest->name,
+            $updateBoardRequest->description,
+            $updateBoardRequest->status,
+            $updateBoardRequest->input('columns')
         );
 
         return redirect()->back()
@@ -97,9 +97,9 @@ class BoardController extends Controller
             ->with('success', 'Board deleted successfully!');
     }
 
-    public function reorderColumns(ReorderColumnsRequest $request, Board $board)
+    public function reorderColumns(ReorderColumnsRequest $reorderColumnsRequest, Board $board)
     {
-        $this->boardService->reorderColumns($board, $request->columns);
+        $this->boardService->reorderColumns($board, $reorderColumnsRequest->columns);
 
         return redirect()->back();
     }

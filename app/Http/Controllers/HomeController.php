@@ -20,7 +20,7 @@ class HomeController extends Controller
                 ->merge($user->boards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', true)))
                 ->merge($user->sharedBoards()->where('status', $status)->with($withColumns)->get()->map(fn ($board) => $board->setAttribute('is_owner', false)));
 
-            return Inertia::render('Boards/Index', compact('boards', 'status'));
+            return Inertia::render('Boards/Index', ['boards' => $boards, 'status' => $status]);
         }
 
         return Inertia::render('Welcome', [

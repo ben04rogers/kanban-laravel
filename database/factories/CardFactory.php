@@ -35,11 +35,11 @@ class CardFactory extends Factory
     /**
      * Create a card with specific board and column
      */
-    public function forBoardAndColumn(Board $board, BoardColumn $column): static
+    public function forBoardAndColumn(Board $board, BoardColumn $boardColumn): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'board_id' => $board->id,
-            'board_column_id' => $column->id,
+            'board_column_id' => $boardColumn->id,
         ]);
     }
 
@@ -48,7 +48,7 @@ class CardFactory extends Factory
      */
     public function assignedTo(User $user): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'user_id' => $user->id,
         ]);
     }
@@ -58,7 +58,7 @@ class CardFactory extends Factory
      */
     public function unassigned(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'user_id' => null,
         ]);
     }
@@ -68,7 +68,7 @@ class CardFactory extends Factory
      */
     public function atPosition(int $position): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn (array $attributes): array => [
             'position' => $position,
         ]);
     }

@@ -47,16 +47,16 @@ class BoardShareController extends Controller
             $this->boardShareService->shareBoard($board, $request->user_id);
 
             return back()->with('success', 'Board shared successfully');
-        } catch (\InvalidArgumentException $e) {
-            return back()->withErrors(['user_id' => $e->getMessage()]);
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+            return back()->withErrors(['user_id' => $invalidArgumentException->getMessage()]);
         }
     }
 
-    public function destroy(Board $board, BoardShare $share)
+    public function destroy(Board $board, BoardShare $boardShare)
     {
         $this->authorize('update', $board);
 
-        $this->boardShareService->removeShare($share);
+        $this->boardShareService->removeShare($boardShare);
 
         return back()->with('success', 'Share removed successfully');
     }

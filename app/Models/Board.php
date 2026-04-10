@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Board extends Model
 {
-    use HasFactory, HasUuids;
-
+    use HasFactory;
+    use HasUuids;
+    
     protected $fillable = [
         'name',
         'description',

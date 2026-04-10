@@ -54,10 +54,10 @@ class TestSeeder extends Seeder
         ];
 
         $createdUsers = [];
-        foreach ($users as $userData) {
+        foreach ($users as $user) {
             $createdUsers[] = User::create([
-                'name' => $userData['name'],
-                'email' => $userData['email'],
+                'name' => $user['name'],
+                'email' => $user['email'],
                 'password' => bcrypt('password'), // Default password for all users
             ]);
         }
@@ -110,7 +110,7 @@ class TestSeeder extends Seeder
         $this->createComments($createdUsers);
     }
 
-    private function shareBoardWithTeam($board, $users)
+    private function shareBoardWithTeam($board, array $users): void
     {
         // Share each board with most team members (excluding owner)
         $excludeOwners = [$board->user_id];
@@ -125,7 +125,7 @@ class TestSeeder extends Seeder
         }
     }
 
-    private function createBoardColumns($boards)
+    private function createBoardColumns(array $boards): void
     {
         $standardColumns = [
             ['name' => 'To Do', 'position' => 0],
@@ -136,17 +136,17 @@ class TestSeeder extends Seeder
         ];
 
         foreach ($boards as $board) {
-            foreach ($standardColumns as $columnData) {
+            foreach ($standardColumns as $standardColumn) {
                 BoardColumn::create([
-                    'name' => $columnData['name'],
-                    'position' => $columnData['position'],
+                    'name' => $standardColumn['name'],
+                    'position' => $standardColumn['position'],
                     'board_id' => $board->id,
                 ]);
             }
         }
     }
 
-    private function createCards($boards, $users)
+    private function createCards(array $boards, array $users): void
     {
         // Core Platform Cards
         $corePlatformCards = [
@@ -158,7 +158,7 @@ class TestSeeder extends Seeder
             ],
             [
                 'title' => 'Build Real-time Code Collaboration',
-                'description' => 'Implement WebSocket connections for live code editing with multiple cursors, conflict resolution, and presence indicators showing who\'s viewing files.',
+                'description' => "Implement WebSocket connections for live code editing with multiple cursors, conflict resolution, and presence indicators showing who's viewing files.",
                 'column' => 'To Do',
                 'assignee' => $users[2], // Emily Johnson (Full-stack Developer)
             ],
@@ -450,7 +450,7 @@ class TestSeeder extends Seeder
         }
     }
 
-    private function createComments($users)
+    private function createComments(array $users): void
     {
         // Get all cards to add comments to
         $cards = Card::all();
@@ -467,11 +467,11 @@ class TestSeeder extends Seeder
                 'context' => 'technical',
             ],
             [
-                'content' => 'I\'ve tested this on Chrome, Firefox, and Safari. Everything looks good across all browsers.',
+                'content' => "I've tested this on Chrome, Firefox, and Safari. Everything looks good across all browsers.",
                 'context' => 'testing',
             ],
             [
-                'content' => 'Found a small bug in the mobile version. The drag and drop doesn\'t work properly on iOS Safari.',
+                'content' => "Found a small bug in the mobile version. The drag and drop doesn't work properly on iOS Safari.",
                 'context' => 'bug',
             ],
             [
@@ -479,7 +479,7 @@ class TestSeeder extends Seeder
                 'context' => 'feedback',
             ],
             [
-                'content' => 'I\'ve updated the documentation in the wiki. The API endpoints are now fully documented.',
+                'content' => "I've updated the documentation in the wiki. The API endpoints are now fully documented.",
                 'context' => 'documentation',
             ],
             [
@@ -487,15 +487,15 @@ class TestSeeder extends Seeder
                 'context' => 'meeting',
             ],
             [
-                'content' => 'I\'ve created a branch for this feature. The code is ready for review.',
+                'content' => "I've created a branch for this feature. The code is ready for review.",
                 'context' => 'development',
             ],
             [
-                'content' => 'The performance tests are passing. We\'re meeting all our benchmarks.',
+                'content' => "The performance tests are passing. We're meeting all our benchmarks.",
                 'context' => 'testing',
             ],
             [
-                'content' => 'I\'ve deployed this to staging. You can test it at staging.example.com',
+                'content' => "I've deployed this to staging. You can test it at staging.example.com",
                 'context' => 'deployment',
             ],
             [
@@ -511,7 +511,7 @@ class TestSeeder extends Seeder
                 'context' => 'design',
             ],
             [
-                'content' => 'I\'ve added some unit tests for this functionality. Coverage is now at 95%.',
+                'content' => "I've added some unit tests for this functionality. Coverage is now at 95%.",
                 'context' => 'testing',
             ],
             [
@@ -519,15 +519,15 @@ class TestSeeder extends Seeder
                 'context' => 'improvement',
             ],
             [
-                'content' => 'I\'ve updated the user story to include the new requirements from the client.',
+                'content' => "I've updated the user story to include the new requirements from the client.",
                 'context' => 'requirements',
             ],
             [
-                'content' => 'The accessibility audit passed! We\'re now WCAG 2.1 AA compliant.',
+                'content' => "The accessibility audit passed! We're now WCAG 2.1 AA compliant.",
                 'context' => 'accessibility',
             ],
             [
-                'content' => 'I\'ve optimized the database queries. The page load time improved by 40%.',
+                'content' => "I've optimized the database queries. The page load time improved by 40%.",
                 'context' => 'optimization',
             ],
             [
@@ -535,7 +535,7 @@ class TestSeeder extends Seeder
                 'context' => 'security',
             ],
             [
-                'content' => 'I\'ve created a demo video showing the new features. Check it out!',
+                'content' => "I've created a demo video showing the new features. Check it out!",
                 'context' => 'demo',
             ],
         ];

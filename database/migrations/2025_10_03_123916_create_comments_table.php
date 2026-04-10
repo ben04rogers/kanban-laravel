@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->text('content');
-            $table->foreignUuid('card_id')->constrained()->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('comments', function (Blueprint $blueprint): void {
+            $blueprint->uuid('id')->primary();
+            $blueprint->text('content');
+            $blueprint->foreignUuid('card_id')->constrained()->onDelete('cascade');
+            $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $blueprint->timestamps();
         });
     }
 

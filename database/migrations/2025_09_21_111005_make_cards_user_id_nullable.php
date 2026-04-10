@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cards', function (Blueprint $table) {
-            $table->foreignUuid('user_id')->nullable()->change();
+        Schema::table('cards', function (Blueprint $blueprint): void {
+            $blueprint->foreignUuid('user_id')->nullable()->change();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('cards', function (Blueprint $table) {
-            $table->foreignUuid('user_id')->nullable(false)->change();
+        Schema::table('cards', function (Blueprint $blueprint): void {
+            $blueprint->foreignUuid('user_id')->nullable(false)->change();
         });
     }
 };

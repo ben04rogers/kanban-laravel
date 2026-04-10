@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Card extends Model
 {
-    use HasFactory, HasUuids;
-
+    use HasFactory;
+    use HasUuids;
+    
     protected $fillable = [
         'title',
         'description',

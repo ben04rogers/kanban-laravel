@@ -26,13 +26,13 @@ class CardController extends Controller
         // Load the board with all necessary relationships
         $board = $card->board;
         $board->load([
-            'columns' => function ($query) {
+            'columns' => function ($query): void {
                 $query->orderBy('position');
             },
-            'columns.cards.user' => function ($query) {
+            'columns.cards.user' => function ($query): void {
                 $query->orderBy('position');
             },
-            'columns.cards.comments.user' => function ($query) {
+            'columns.cards.comments.user' => function ($query): void {
                 $query->orderBy('created_at', 'desc');
             },
             'user',
@@ -53,41 +53,41 @@ class CardController extends Controller
         ]);
     }
 
-    public function store(StoreCardRequest $request)
+    public function store(StoreCardRequest $storeCardRequest)
     {
-        $board = Board::findOrFail($request->board_id);
+        Board::findOrFail($storeCardRequest->board_id);
 
         $this->cardService->createCard(
-            $request->board_id,
-            $request->board_column_id,
-            $request->title,
-            $request->description,
-            $request->assigned_user_id
+            $storeCardRequest->board_id,
+            $storeCardRequest->board_column_id,
+            $storeCardRequest->title,
+            $storeCardRequest->description,
+            $storeCardRequest->assigned_user_id
         );
 
         return redirect()->back()
             ->with('success', 'Card created successfully!');
     }
 
-    public function update(UpdateCardRequest $request, Card $card)
+    public function update(UpdateCardRequest $updateCardRequest, Card $card)
     {
         $this->cardService->updateCard(
             $card,
-            $request->title,
-            $request->description,
-            $request->assigned_user_id
+            $updateCardRequest->title,
+            $updateCardRequest->description,
+            $updateCardRequest->assigned_user_id
         );
 
         return redirect()->back()
             ->with('success', 'Card updated successfully!');
     }
 
-    public function move(MoveCardRequest $request, Card $card)
+    public function move(MoveCardRequest $moveCardRequest, Card $card)
     {
         $this->cardService->moveCard(
             $card,
-            $request->board_column_id,
-            $request->position
+            $moveCardRequest->board_column_id,
+            $moveCardRequest->position
         );
 
         return redirect()->back();

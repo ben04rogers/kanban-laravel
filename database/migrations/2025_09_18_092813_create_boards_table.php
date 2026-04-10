@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('boards', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::create('boards', function (Blueprint $blueprint): void {
+            $blueprint->uuid('id')->primary();
+            $blueprint->string('name');
+            $blueprint->text('description')->nullable();
+            $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $blueprint->timestamps();
         });
     }
 

@@ -20,8 +20,8 @@ class BoardShareService
             return collect();
         }
 
-        return User::where('name', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
+        return User::where('name', 'like', sprintf('%%%s%%', $query))
+            ->orWhere('email', 'like', sprintf('%%%s%%', $query))
             ->limit($limit)
             ->get(['id', 'name', 'email']);
     }
@@ -48,9 +48,9 @@ class BoardShareService
         ]);
     }
 
-    public function removeShare(BoardShare $share): bool
+    public function removeShare(BoardShare $boardShare): bool
     {
-        return $share->delete();
+        return $boardShare->delete();
     }
 
     public function isBoardSharedWithUser(Board $board, string $userId): bool
@@ -62,7 +62,7 @@ class BoardShareService
 
     public function getSharedBoardsForUser(string $userId): Collection
     {
-        return Board::whereHas('shares', function ($query) use ($userId) {
+        return Board::whereHas('shares', function ($query) use ($userId): void {
             $query->where('user_id', $userId);
         })->get();
     }

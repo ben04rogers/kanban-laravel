@@ -23,7 +23,7 @@ class BoardService
 
     public function updateBoard(Board $board, string $name, ?string $description = null, ?string $status = null, ?array $columns = null): Board
     {
-        DB::transaction(function () use ($board, $name, $description, $status, $columns) {
+        DB::transaction(function () use ($board, $name, $description, $status, $columns): void {
             // Update board properties
             $updateData = [
                 'name' => $name,
@@ -57,7 +57,7 @@ class BoardService
 
         // Delete columns that are not in the new list (validation already checked for cards)
         // Only delete if there are existing column IDs, otherwise whereNotIn([]) would delete all
-        if (! empty($existingColumnIds)) {
+        if ($existingColumnIds !== []) {
             $board->columns()->whereNotIn('id', $existingColumnIds)->delete();
         } else {
             // If no existing IDs, all columns are new, so delete all old columns
@@ -92,9 +92,9 @@ class BoardService
 
     public function reorderColumns(Board $board, array $columns): void
     {
-        foreach ($columns as $columnData) {
-            $board->columns()->where('id', $columnData['id'])->update([
-                'position' => $columnData['position'],
+        foreach ($columns as $column) {
+            $board->columns()->where('id', $column['id'])->update([
+                'position' => $column['position'],
             ]);
         }
     }
@@ -108,10 +108,10 @@ class BoardService
             ['name' => 'Done', 'position' => 3],
         ];
 
-        foreach ($defaultColumns as $column) {
+        foreach ($defaultColumns as $defaultColumn) {
             BoardColumn::create([
-                'name' => $column['name'],
-                'position' => $column['position'],
+                'name' => $defaultColumn['name'],
+                'position' => $defaultColumn['position'],
                 'board_id' => $board->id,
             ]);
         }

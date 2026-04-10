@@ -20,9 +20,9 @@ class UpdateCardRequest extends FormRequest
     /**
      * Configure the validator instance.
      */
-    public function withValidator($validator)
+    public function withValidator($validator): void
     {
-        $validator->after(function ($validator) {
+        $validator->after(function ($validator): void {
             if ($this->assigned_user_id) {
                 $card = $this->route('card');
                 if ($card) {

@@ -33,7 +33,7 @@ class BoardFactory extends Factory
      */
     public function withColumns(): static
     {
-        return $this->afterCreating(function (Board $board) {
+        return $this->afterCreating(function (Board $board): void {
             $defaultColumns = [
                 ['name' => 'To Do', 'position' => 0],
                 ['name' => 'In Progress', 'position' => 1],
@@ -41,8 +41,8 @@ class BoardFactory extends Factory
                 ['name' => 'Done', 'position' => 3],
             ];
 
-            foreach ($defaultColumns as $column) {
-                $board->columns()->create($column);
+            foreach ($defaultColumns as $defaultColumn) {
+                $board->columns()->create($defaultColumn);
             }
         });
     }
