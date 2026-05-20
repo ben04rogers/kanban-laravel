@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     container_name: kanban-postgres
     environment:
-      POSTGRES_DB: kanban_laravel
-      POSTGRES_USER: kanban
-      POSTGRES_PASSWORD: kanban
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
