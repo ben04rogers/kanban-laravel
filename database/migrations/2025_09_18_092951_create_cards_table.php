@@ -17,7 +17,7 @@ return new class extends Migration
             $blueprint->text('description')->nullable();
             $blueprint->integer('position')->default(0);
             $blueprint->foreignUuid('board_id')->constrained()->onDelete('cascade');
-            $blueprint->foreignId('board_column_id')->constrained()->onDelete('cascade');
+            $blueprint->foreignUuid('board_column_id')->constrained()->onDelete('cascade');
             $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $blueprint->timestamps();
         });

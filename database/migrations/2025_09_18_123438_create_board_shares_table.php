@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('board_shares', function (Blueprint $blueprint): void {
-            $blueprint->id();
+            $blueprint->uuid('id')->primary();
             $blueprint->foreignUuid('board_id')->constrained()->onDelete('cascade');
             $blueprint->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $blueprint->timestamps();

@@ -76,7 +76,7 @@ class UpdateBoardRequest extends FormRequest
             $columns = $this->input('columns', []);
 
             // Check for duplicate column names
-            $names = array_map(fn (array $col) => strtolower(trim($col['name'])), $columns);
+            $names = array_map(fn (array $col) => strtolower(trim($col['name'] ?? '')), $columns);
             if (count($names) !== count(array_unique($names))) {
                 $validator->errors()->add('columns', 'Column names must be unique.');
             }

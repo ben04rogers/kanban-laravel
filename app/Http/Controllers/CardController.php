@@ -31,9 +31,7 @@ class CardController extends Controller
             'columns' => function ($query): void {
                 $query->orderBy('position');
             },
-            'columns.cards.user' => function ($query): void {
-                $query->orderBy('position');
-            },
+            'columns.cards.user',
             'columns.cards.comments.user' => function ($query): void {
                 $query->orderBy('created_at', 'desc');
             },
