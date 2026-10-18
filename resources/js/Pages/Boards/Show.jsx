@@ -170,7 +170,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                     )}
                                 </div>
                                 
-                                <div className="flex flex-wrap items-center gap-2 sm:space-x-3">
+                                <div className="flex flex-wrap items-center gap-2.5">
                                     {/* Board Width Toggle - hidden on mobile */}
                                     <button
                                         onClick={toggleExpanded}
