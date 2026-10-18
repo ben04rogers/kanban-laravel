@@ -26,6 +26,7 @@ class ConnectRepositoryRequest extends FormRequest
         return [
             'access_token' => 'required|string|min:10',
             'repository' => ['required', 'string', 'regex:/^[\w.-]+\/[\w.-]+$/'],
+            'branch' => 'nullable|string|max:255',
         ];
     }
 

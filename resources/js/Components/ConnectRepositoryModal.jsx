@@ -1,5 +1,5 @@
 import { useForm, router } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
 import { useToast } from '@/Contexts/ToastContext';
@@ -11,12 +11,21 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         repository: '',
         access_token: '',
+        branch: '',
     });
+
+    const [branches, setBranches] = useState([]);
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [verifyError, setVerifyError] = useState(null);
+    const [verified, setVerified] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
             reset();
             clearErrors();
+            setBranches([]);
+            setVerified(false);
+            setVerifyError(null);
         }
     }, [isOpen]);
 
@@ -24,6 +33,36 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
         reset();
         clearErrors();
         onClose();
+    };
+
+    // Editing repo/token after verifying invalidates the branch list.
+    const updateField = (field, value) => {
+        setData(field, value);
+        if (verified) {
+            setVerified(false);
+            setBranches([]);
+        }
+    };
+
+    const verifyRepository = async () => {
+        setVerifyError(null);
+        setIsVerifying(true);
+        try {
+            const response = await window.axios.post(route('boards.repository.branches', board.id), {
+                repository: data.repository,
+                access_token: data.access_token,
+            });
+
+            setBranches(response.data.branches || []);
+            setData('branch', response.data.default_branch || 'main');
+            setVerified(true);
+        } catch (err) {
+            setVerified(false);
+            setBranches([]);
+            setVerifyError(err.response?.data?.message || 'Could not verify repository.');
+        } finally {
+            setIsVerifying(false);
+        }
     };
 
     const submit = (e) => {
@@ -89,7 +128,7 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
                             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md mb-6">
                                 <div>
                                     <div className="font-medium text-gray-900">{repository.full_name}</div>
-                                    <div className="text-sm text-gray-500">Default branch: {repository.default_branch}</div>
+                                    <div className="text-sm text-gray-500">Branch: {repository.default_branch}</div>
                                 </div>
                                 <DangerButton onClick={disconnect} className="px-3 py-1 text-sm">
                                     Disconnect
@@ -109,7 +148,7 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
                                 <input
                                     type="text"
                                     value={data.repository}
-                                    onChange={(e) => setData('repository', e.target.value)}
+                                    onChange={(e) => updateField('repository', e.target.value)}
                                     placeholder="owner/repo"
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -125,7 +164,7 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
                                 <input
                                     type="password"
                                     value={data.access_token}
-                                    onChange={(e) => setData('access_token', e.target.value)}
+                                    onChange={(e) => updateField('access_token', e.target.value)}
                                     placeholder="ghp_..."
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -133,10 +172,46 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
                                     <p className="mt-1 text-sm text-red-600">{errors.access_token}</p>
                                 )}
                             </div>
-                            <p className="text-xs text-gray-400 mb-6">
+                            <p className="text-xs text-gray-400 mb-4">
                                 Use a fine-grained personal access token scoped to this one repository, with
                                 read/write access to code and pull requests. The token is encrypted and never shown again.
                             </p>
+
+                            {!verified ? (
+                                <div className="mb-2">
+                                    <button
+                                        type="button"
+                                        onClick={verifyRepository}
+                                        disabled={isVerifying || !data.repository || !data.access_token}
+                                        className="w-full px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
+                                    >
+                                        {isVerifying ? 'Verifying...' : 'Verify Repository & Load Branches'}
+                                    </button>
+                                    {verifyError && (
+                                        <p className="mt-2 text-sm text-red-600">{verifyError}</p>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="mb-6">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Branch
+                                    </label>
+                                    <select
+                                        value={data.branch}
+                                        onChange={(e) => setData('branch', e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        {branches.map((branchName) => (
+                                            <option key={branchName} value={branchName}>
+                                                {branchName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <p className="mt-1 text-xs text-gray-400">
+                                        The AI will branch off and open pull requests against this branch.
+                                    </p>
+                                </div>
+                            )}
 
                             <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                                 <button
@@ -146,7 +221,7 @@ export default function ConnectRepositoryModal({ isOpen, onClose, board }) {
                                 >
                                     Cancel
                                 </button>
-                                <PrimaryButton disabled={processing}>
+                                <PrimaryButton disabled={processing || !verified}>
                                     {processing ? 'Connecting...' : 'Connect Repository'}
                                 </PrimaryButton>
                             </div>

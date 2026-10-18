@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('boards', BoardController::class);
     Route::post('/boards/{board}/columns/reorder', [BoardController::class, 'reorderColumns'])->name('boards.columns.reorder');
     Route::patch('/boards/{board}/status', [BoardController::class, 'updateStatus'])->name('boards.status.update');
+    Route::post('/boards/{board}/repository/branches', [RepositoryController::class, 'branches'])->name('boards.repository.branches');
     Route::post('/boards/{board}/repository', [RepositoryController::class, 'store'])->name('boards.repository.store');
     Route::delete('/boards/{board}/repository', [RepositoryController::class, 'destroy'])->name('boards.repository.destroy');
 
