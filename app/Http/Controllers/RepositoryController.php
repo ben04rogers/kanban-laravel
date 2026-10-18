@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ConnectRepositoryRequest;
+use App\Models\Board;
+use App\Services\GithubRepositoryService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+class RepositoryController extends Controller
+{
+    use AuthorizesRequests;
+
+    public function __construct(private GithubRepositoryService $githubRepositoryService) {}
+
+    public function store(ConnectRepositoryRequest $connectRepositoryRequest, Board $board)
+    {
+        $this->authorize('update', $board);
+
+        try {
+            $this->githubRepositoryService->connect(
+                $board,
+                auth()->id(),
+                $connectRepositoryRequest->access_token,
+                $connectRepositoryRequest->repository
+            );
+
+            return back()->with('success', 'Repository connected successfully!');
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+            return back()->withErrors(['repository' => $invalidArgumentException->getMessage()]);
+        }
+    }
+
+    public function destroy(Board $board)
+    {
+        $this->authorize('update', $board);
+
+        if ($board->repository) {
+            $this->githubRepositoryService->disconnect($board->repository);
+        }
+
+        return back()->with('success', 'Repository disconnected.');
+    }
+}

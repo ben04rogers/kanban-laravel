@@ -7,6 +7,7 @@ import CardModal from '@/Components/CardModal';
 import CardDetailModal from '@/Components/CardDetailModal';
 import ShareBoardModal from '@/Components/ShareBoardModal';
 import EditBoardModal from '@/Components/EditBoardModal';
+import ConnectRepositoryModal from '@/Components/ConnectRepositoryModal';
 import DroppableColumn from '@/Components/DroppableColumn';
 import Dropdown from '@/Components/Dropdown';
 import { useState, useEffect } from 'react';
@@ -18,6 +19,7 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
     const [showCardModal, setShowCardModal] = useState(false);
     const [showCardDetailModal, setShowCardDetailModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
+    const [showRepositoryModal, setShowRepositoryModal] = useState(false);
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [isExpanded, setIsExpanded] = useState(() => {
@@ -195,7 +197,39 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
                                             </>
                                         )}
                                     </button>
-                                    
+
+                                    {/* Repository pill */}
+                                    {board.repository ? (
+                                        <button
+                                            onClick={() => board.is_creator ? setShowRepositoryModal(true) : window.open(`https://github.com/${board.repository.full_name}`, '_blank')}
+                                            className="flex items-center gap-1.5 px-2 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            title={board.is_creator ? 'Manage connected repository' : `Open ${board.repository.full_name} on GitHub`}
+                                        >
+                                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                                <line x1="6" y1="3" x2="6" y2="15"></line>
+                                                <circle cx="18" cy="6" r="3"></circle>
+                                                <circle cx="6" cy="18" r="3"></circle>
+                                                <path d="M18 9a9 9 0 0 1-9 9"></path>
+                                            </svg>
+                                            {board.repository.full_name}
+                                            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                                        </button>
+                                    ) : board.is_creator && (
+                                        <button
+                                            onClick={() => setShowRepositoryModal(true)}
+                                            className="flex items-center gap-1.5 px-2 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            title="Connect a GitHub repository"
+                                        >
+                                            <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                                                <line x1="6" y1="3" x2="6" y2="15"></line>
+                                                <circle cx="18" cy="6" r="3"></circle>
+                                                <circle cx="6" cy="18" r="3"></circle>
+                                                <path d="M18 9a9 9 0 0 1-9 9"></path>
+                                            </svg>
+                                            Connect Repo
+                                        </button>
+                                    )}
+
                                     {/* Actions */}
                                     {board.is_creator ? (
                                         <Dropdown>
@@ -357,6 +391,13 @@ export default function Show({ board, boardUsers = [], cardId = null }) {
             <EditBoardModal
                 isOpen={showEditModal}
                 onClose={() => setShowEditModal(false)}
+                board={board}
+            />
+
+            {/* Connect Repository Modal */}
+            <ConnectRepositoryModal
+                isOpen={showRepositoryModal}
+                onClose={() => setShowRepositoryModal(false)}
                 board={board}
             />
         </AuthenticatedLayout>

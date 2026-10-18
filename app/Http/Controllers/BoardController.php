@@ -43,6 +43,7 @@ class BoardController extends Controller
             'columns.cards.comments.user',
             'user',
             'sharedWith',
+            'repository',
         ]);
 
         // Get all users with access to the board (owner + shared users)

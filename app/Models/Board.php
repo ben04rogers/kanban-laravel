@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Board extends Model
 {
@@ -45,6 +46,11 @@ class Board extends Model
     public function shares(): HasMany
     {
         return $this->hasMany(BoardShare::class);
+    }
+
+    public function repository(): HasOne
+    {
+        return $this->hasOne(Repository::class);
     }
 
     public function sharedWith(): HasManyThrough
